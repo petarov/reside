@@ -8,19 +8,21 @@ const {
   BrowserWindow
 } = require('electron');
 
-const Photon = require('electron-photon');
+console.log(__dirname);
+require('electron-reload')(__dirname);
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
 
 function createWindow () {
-  // Create the browser window.
-  mainWindow = new BrowserWindow({width: 800, height: 600});
+  mainWindow = new BrowserWindow({
+    width: 1024, height: 768
+  });
 
   // and load the index.html of the app.
-  mainWindow.loadFile('index.html');
-
+  //mainWindow.loadFile('index.html');
+  mainWindow.loadURL(`file://${__dirname}/index.html`);
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
 
@@ -32,21 +34,12 @@ function createWindow () {
     mainWindow = null;
   })
 
+  createMenu();
 }
 
 function createMenu () {
-  const template = [
-    {
-      label: 'File',
-      submenu: [
-        { role: 'Open' },
-        { role: 'Save ASSS' },
-      ]
-    }
-  ];
-
-  const menu = Menu.buildFromTemplate(template);
-  Menu.setApplicationMenu(menu);
+  const mainMenu = require('./menu.js');
+  Menu.setApplicationMenu(mainMenu.createMainMenu());
 }
 
 // This method will be called when Electron has finished

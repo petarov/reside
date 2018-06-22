@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Reside</title>
+  </head>
+  <body>
+
+    <ph-window>
+      <!--Top header bar here-->
+      <tool-bar type="header">
+        Toolbar Header
+      </tool-bar>
+
+      <!--Window content here-->
+      <window-content>
+        <div class="pane-group">
+          <!--Sidebar here-->
+          <div class="pane-sm sidebar">
+            <input type="text" value="Search" style="width: 95%">
+            <list-group>
+              
+              <list-item>
+                <item-inner>
+                  Translation_ALABALA_1
+                </item-inner>
+              </list-item>
+              <list-item>
+                <item-inner>
+                Translation_ALABALA_2
+                </item-inner>
+              </list-item>
+
+            </list-group>
+          </div>
+
+          <!--Main pane-->
+          <div class="pane">
+            
+            <input type="text" value="Text">
+            <br>
+            <textarea></textarea>
+
+          </div>
+        </div>
+      </window-content>
+
+      <!--Bottom footer bar here-->
+      <tool-bar type="footer">
+        Footer Header
+      </tool-bar>
+
+    </ph-window>
+
+
+    <script>
+      require('./renderer.js')
+    </script>
+  </body>
+</html>
