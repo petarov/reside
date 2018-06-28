@@ -7,7 +7,7 @@
   <!-- Color theme for statusbar -->
   <meta name="theme-color" content="#2196f3">
   <title>Reside</title>
-  <link rel="stylesheet" href="styles/framework7.min.css">
+  <link rel="stylesheet" href="./global.css">
 </head>
 
 <body>
@@ -84,8 +84,7 @@
           <div class="navbar-inner">
             <div class="left">
               <a href="#" class="link icon-only panel-open" data-panel="left">
-                <i class="icon f7-icons ios-only">menu</i>
-                <i class="icon material-icons md-only">menu</i>
+                <i class="icon material-icons">menu</i>
               </a>
             </div>
             <div class="title sliding">Reside</div>
@@ -98,10 +97,21 @@
             <div class="col-33">
               <div class="row">
                   <!-- Toolbar links -->
-                  <a href="#" class="link">Open</a>
-                  <a href="#" class="link">Save</a>
-                  <a href="#" class="link">Save As</a>
-                  <a href="#" class="link">Settings</a>
+                  <a href="#" class="link">
+                    <i class="icon material-icons">folder_open</i>
+                    Open
+                  </a>
+                  <a href="#" class="link">
+                    <i class="icon material-icons">save</i>
+                    Save
+                  </a>
+                  <a href="#" class="link">
+                    Save As
+                  </a>
+                  <a href="#" class="link">
+                    <i class="icon material-icons">settings</i>
+                    Settings
+                  </a>
                   <a href="#" class="link">Quit</a>
                 </div>
               </div>
@@ -111,7 +121,7 @@
         <!-- Scrollable page content -->
         <div class="fab fab-right-bottomh">
           <a href="#">
-            <i class="icon f7-icons">add</i>
+            <i class="icon material-icons">add</i>
           </a>
         </div>
 
@@ -138,17 +148,47 @@
                   </div>
                 </div>
               </li>
+              <li class="item-content">
+                <div class="item-inner item-cell">
+                  
+                    <div class="item-row">
+                      <div class="item-cell" style="width: 180px">
+                        <button class="col button button-fill">
+                          <i class="icon material-icons">content_copy</i>
+                          Clone
+                        </button>
+                      </div>
+
+                      <div class="item-cell" style="width: 180px">
+                        <button class="col button button-outline">
+                          <i class="icon material-icons">delete</i>
+                          Delete
+                        </button>
+                      </div>
+
+                      <div class="item-cell"></div>
+                    </div>
+
+                </div>
+              </li>
+              
             </ul>
           </div>
 
-          <div class="row">
-            <div class="col-33">
+          <!-- <div class="row">
+            <div class="col-50">
               <div class="row">
-                <button class="col button button-fill">Clone</button>
-                <button class="col button button-outline">Delete</button>
+                <button class="col button button-fill">
+                  <i class="icon material-icons">content_copy</i>
+                  Clone
+                </button>
+                <button class="col button button-outline">
+                  <i class="icon material-icons">delete</i>
+                  Delete
+                </button>
               </div>
             </div>
-          </div>
+          </div> -->
 
         </div>
     </div>
