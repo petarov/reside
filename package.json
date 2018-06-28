@@ -1,12 +1,12 @@
 {
   "name": "reside",
   "version": "0.0.1",
-  "description": "Reside is a minimalistic Java ResourceBundle files editor GUI.",
+  "description": "Reside is a minimalistic Java ResourceBundle files editor.",
   "main": "./src/main.js",
   "scripts": {
     "start": "electron src/main.js"
   },
-  "repository": "https://github.com/electron/electron-quick-start",
+  "repository": "https://github.com/petarov/reside",
   "keywords": [
     "java",
     "ResourceBundle",
