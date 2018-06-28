@@ -2360,10 +2360,6 @@ form-data@~2.1.1:
     combined-stream "^1.0.5"
     mime-types "^2.1.12"
 
-framework7-icons@^0.9.1:
-  version "0.9.1"
-  resolved "https://registry.yarnpkg.com/framework7-icons/-/framework7-icons-0.9.1.tgz#01f089ce9f71eae112f516630b17009929a8b384"
-
 framework7@^3.0.0-beta.15:
   version "3.0.0-beta.15"
   resolved "https://registry.yarnpkg.com/framework7/-/framework7-3.0.0-beta.15.tgz#08b2a0a62b919a7e17541add9d4f47807d03dda0"
@@ -2908,10 +2904,6 @@ inquirer@^5.0.0:
     string-width "^2.1.0"
     strip-ansi "^4.0.0"
     through "^2.3.6"
-
-install@^0.12.1:
-  version "0.12.1"
-  resolved "https://registry.yarnpkg.com/install/-/install-0.12.1.tgz#38b2dd4489330e9af3eeaba93b9e3fc77dee7872"
 
 invariant@^2.2.2:
   version "2.2.4"

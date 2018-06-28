@@ -1,11 +1,13 @@
 // app.js
 
+const { ipcRenderer } = require('electron');
 const Framework7 = require('framework7');
+
+const $$ = Dom7;
 
 class ResideApp {
 
   constructor() {
-
   }
 
   init() {
@@ -39,6 +41,16 @@ class ResideApp {
     });
 
     this._app = app;
+
+    this.attachListeners();
+  }
+
+  attachListeners() {
+    $$('.menu-quit').on('click', (e) => {
+      const dialog = this._app.dialog.confirm('Are you sure?', 'Quit app', () => {
+        ipcRenderer.sendSync('_quit');
+      });
+    });
   }
 
   get app() {
