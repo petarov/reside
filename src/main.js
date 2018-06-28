@@ -17,14 +17,15 @@ let mainWindow;
 
 function createWindow () {
   mainWindow = new BrowserWindow({
-    width: 1024, height: 768
+    width: 1440, height: 900
   });
 
   // and load the index.html of the app.
   //mainWindow.loadFile('index.html');
   mainWindow.loadURL(`file://${__dirname}/index.html`);
-  // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
+
+  // debug
+  mainWindow.webContents.openDevTools()
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {

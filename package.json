@@ -19,7 +19,8 @@
     "electron": "^2.0.0"
   },
   "dependencies": {
-    "electron-photon": "^1.1.6",
-    "electron-reload": "^1.2.3"
+    "electron-reload": "^1.2.3",
+    "framework7": "^3.0.0-beta.15",
+    "framework7-icons": "^0.9.1"
   }
 }

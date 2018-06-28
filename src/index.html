@@ -1,60 +1,163 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <title>Reside</title>
-  </head>
-  <body>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#2196f3">
+  <title>Reside</title>
+  <link rel="stylesheet" href="styles/framework7.min.css">
+</head>
 
-    <ph-window>
-      <!--Top header bar here-->
-      <tool-bar type="header">
-        Toolbar Header
-      </tool-bar>
+<body>
+  <!-- App root element -->
+  <div id="app">
+    <!-- Statusbar overlay -->
+    <div class="statusbar"></div>
 
-      <!--Window content here-->
-      <window-content>
-        <div class="pane-group">
-          <!--Sidebar here-->
-          <div class="pane-sm sidebar">
-            <input type="text" value="Search" style="width: 95%">
-            <list-group>
+    <div class="panel panel-left">
+      <div class="view view-left">
+        <div class="page">
+
+          <div class="navbar">
+            <div class="navbar-inner sliding">
+              <div class="title">Navigation</div>
               
-              <list-item>
-                <item-inner>
-                  Translation_ALABALA_1
-                </item-inner>
-              </list-item>
-              <list-item>
-                <item-inner>
-                Translation_ALABALA_2
-                </item-inner>
-              </list-item>
+              <div class="subnavbar">
+                <!-- Searchbar inside of Subnavbar -->
+                <form class="searchbar">
+                  <div class="searchbar-inner">
+                    <div class="searchbar-input-wrap">
+                      <input type="search" placeholder="Search">
+                      <i class="searchbar-icon"></i>
+                      <span class="input-clear-button"></span>
+                    </div>
+                    <span class="searchbar-disable-button">Cancel</span>
+                  </div>
+                </form>
+              </div>
 
-            </list-group>
+            </div>
           </div>
 
-          <!--Main pane-->
-          <div class="pane">
-            
-            <input type="text" value="Text">
-            <br>
-            <textarea></textarea>
+          <div class="page-content">
+            <!-- <div class="block-title">Menu</div>
+            <div class="list links-list">
+              <ul>
+                <li>
+                  <a href="/about/" data-view=".view-main" class="panel-close">File</a>
+                </li>
+                <li>
+                  <a href="/about/" data-view=".view-main" class="panel-close">Settings</a>
+                </li>
+                <li>
+                  <a href="/form/" data-view=".view-main" class="panel-close">Exit</a>
+                </li>
+              </ul>
+            </div> -->
 
+            <div class="block-title">Translation Keys</div>
+            <div class="list links-list">
+              <ul>
+                <li>
+                  <a href="#">Translation 1</a>
+                </li>
+                <li>
+                  <a href="#">Translation 2</a>
+                </li>
+              </ul>
+            </div>
+            
           </div>
         </div>
-      </window-content>
+      </div>
+    </div>
 
-      <!--Bottom footer bar here-->
-      <tool-bar type="footer">
-        Footer Header
-      </tool-bar>
+    <!-- Your main view, should have "view-main" class -->
+    <div class="view view-main ios-edges">
+      <!-- Initial Page, "data-name" contains page name -->
+      <div data-name="home" class="page">
 
-    </ph-window>
+        <!-- Top Navbar -->
+        <div class="navbar">
+          <div class="navbar-inner">
+            <div class="left">
+              <a href="#" class="link icon-only panel-open" data-panel="left">
+                <i class="icon f7-icons ios-only">menu</i>
+                <i class="icon material-icons md-only">menu</i>
+              </a>
+            </div>
+            <div class="title sliding">Reside</div>
+          </div>
+        </div>
 
+        <!-- Toolbar -->
+        <div class="toolbar">
+          <div class="toolbar-inner">
+            <div class="col-33">
+              <div class="row">
+                  <!-- Toolbar links -->
+                  <a href="#" class="link">Open</a>
+                  <a href="#" class="link">Save</a>
+                  <a href="#" class="link">Save As</a>
+                  <a href="#" class="link">Settings</a>
+                  <a href="#" class="link">Quit</a>
+                </div>
+              </div>
+          </div>
+        </div>
 
-    <script>
-      require('./renderer.js')
-    </script>
-  </body>
+        <!-- Scrollable page content -->
+        <div class="fab fab-right-bottomh">
+          <a href="#">
+            <i class="icon f7-icons">add</i>
+          </a>
+        </div>
+
+        <div class="page-content">
+
+          <div class="list no-hairlines-md">
+            <ul>
+              <li class="item-content item-input">
+                <div class="item-inner">
+                  <div class="item-title item-label">Translation Key</div>
+                  <div class="item-input-wrap">
+                    <input type="text" placeholder="Unique translation key string">
+                    <span class="input-clear-button"></span>
+                  </div>
+                </div>
+              </li>
+              <li>
+              <li class="item-content item-input">
+                <div class="item-inner">
+                  <div class="item-title item-label">Translation Text</div>
+                  <div class="item-input-wrap">
+                    <textarea class="resizable" placeholder="Single or multi line translation text"></textarea>
+                    <span class="input-clear-button"></span>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <div class="row">
+            <div class="col-33">
+              <div class="row">
+                <button class="col button button-fill">Clone</button>
+                <button class="col button button-outline">Delete</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+    </div>
+
+  </div>
+
+  <script>
+    require('./renderer.js')
+  </script>
+</body>
+
 </html>
