@@ -17,15 +17,33 @@ class ResBundle {
   }
 
   reload() {
-    // TODO
+    return new Promise((resolve, reject) => {
+      console.log(`Loading ${this._filepath} ...`);
 
-    readline.createInterface({
-      input: fs.createReadStream('file.in')
-    });
+      const lineReader = readline.createInterface({
+        input: fs.createReadStream(this._filepath)
+      });
+  
+      lineReader.on('line', (line) => {
+        //console.log('Line: ', line);
+        const parts = line.split('=', 2);
+        // this.strings[parts[0].trim()] = decodeURIComponent(parts[1].trim());
+        // TODO: find a proper way to do this
+        this.strings[parts[0].trim()] = decodeURIComponent(JSON.parse('"' + parts[1].replace(/\"/g, '\\"') + '"'));
+      });
 
-    lineReader.on('line', (line) => {
-      console.log('Line from file:', line);
+      lineReader.on('close', () => {
+        resolve(this);
+      });
     });
+  }
+
+  get name() {
+    return this._name;
+  }
+
+  get locale() {
+    return this._locale;
   }
 
   get strings() {

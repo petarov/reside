@@ -60,4 +60,20 @@ describe('resloader', function () {
     });
   });
 
+  describe('#load()', function () {
+    it('should load TestBundle files', function () {
+      new ResLoader()
+        .path(`${__dirname}/data`)
+        .name('TestBundle')
+        .load().then((mapped) => {
+          assert.equal(mapped.size, 2);
+          assert.equal(mapped.get('TestBundle_de.properties').locale, 'de');
+          assert.equal(mapped.get('TestBundle_en.properties').locale, 'en');
+          // console.log(mapped.get('TestBundle_de.properties').strings);
+        }).catch((e) => {
+          assert.fail('Failed loading TestBundle files!');
+        });
+    });
+  });
+
 });

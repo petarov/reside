@@ -42,9 +42,7 @@ class ResLoader {
         } else if (!st.isDirectory()) {
           reject('Path specified is not a directory!');
         } else {
-          resolve(this._resolveFiles().then(
-            (files) => this._loadFiles(files, callback))
-          );
+          resolve(this._resolveFiles().then((files) => this._loadFiles(files)));
         }
       });
     });
@@ -82,16 +80,21 @@ class ResLoader {
   _loadFiles(files) {
     return new Promise((resolve, reject) => {
       let bundles = new Map();
+      let oneFailed = false;
 
-      for (const entry of files) {
-        const bundle = new ResBundle(
-          path.join(this._path, entry.file), entry.locale);
-        
-        // TODO: load
+      const promised = files.map((entry) => new ResBundle(
+        path.join(this._path, entry.file), entry.file, entry.locale).reload());
 
-        bundles.set(bundle);
-      }
-
+      Promise.all(promised).then((bundles) => {
+        const mapped = new Map();
+        for (const bundle of bundles) {
+          mapped.set(bundle.name, bundle);
+        }
+        resolve(mapped);
+      }).catch((e) => {
+        console.error(`Error loading bundle file!`, e);
+        reject(e);
+      })
     });
   }
 
