@@ -1,6 +1,7 @@
 // app.js
 
 const { ipcRenderer } = require('electron');
+const { dialog } = require('electron').remote;
 const Framework7 = require('framework7');
 
 const $$ = Dom7;
@@ -47,7 +48,17 @@ class ResideApp {
 
   attachListeners() {
     $$('.menu-open').on('click', (e) => {
-      // TEST
+      dialog.showOpenDialog({
+        title: 'Select a bundle file',
+        properties: ['openFile'],
+        filters: [
+          {name: 'Properties', extensions: ['properties']},
+          {name: 'All files', extensions: ['*']}
+        ]
+      }, (filePaths) => {
+        // TODO load all by base name
+        console.log(filePaths);
+      });
     });
 
     $$('.menu-quit').on('click', (e) => {
