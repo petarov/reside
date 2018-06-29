@@ -46,8 +46,12 @@ class ResideApp {
   }
 
   attachListeners() {
+    $$('.menu-open').on('click', (e) => {
+      // TEST
+    });
+
     $$('.menu-quit').on('click', (e) => {
-      const dialog = this._app.dialog.confirm('Are you sure?', 'Quit app', () => {
+      const dialog = this._app.dialog.confirm('Are you sure?', 'Quit App', () => {
         ipcRenderer.sendSync('_quit');
       });
     });
