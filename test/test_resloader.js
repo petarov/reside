@@ -11,41 +11,41 @@ chai.use(chaiAsPromised);
 describe('resloader', function () {
 
   describe('#_resolveFiles()', function () {
-    it('should resolve CommonLabelsBundle files by given locales', function () {
+    it('should resolve TestBundle files by given locales', function () {
       const resloader = new ResLoader()
         .path(`${__dirname}/data`)
-        .name('CommonLabelsBundle')
+        .name('TestBundle')
         .locales(['de', 'en'])
         ._resolveFiles().then((files) => {
           assert.equal(files.length, 2);
-          assert.equal(files[0].file, 'CommonLabelsBundle_de.properties');
+          assert.equal(files[0].file, 'TestBundle_de.properties');
           assert.equal(files[0].locale, 'de');
-          assert.equal(files[1].file, 'CommonLabelsBundle_en.properties');
+          assert.equal(files[1].file, 'TestBundle_en.properties');
           assert.equal(files[1].locale, 'en');
         });
     });
 
-    it('should find all CommonLabelsBundle files by path', function () {
+    it('should find all TestBundle files by path', function () {
       const resloader = new ResLoader()
         .path(`${__dirname}/data`)
-        .name('CommonLabelsBundle')
+        .name('TestBundle')
         ._resolveFiles().then((files) => {
           assert.equal(files.length, 2);
-          assert.equal(files[0].file, 'CommonLabelsBundle_de.properties');
+          assert.equal(files[0].file, 'TestBundle_de.properties');
           assert.equal(files[0].locale, 'de');
-          assert.equal(files[1].file, 'CommonLabelsBundle_en.properties');
+          assert.equal(files[1].file, 'TestBundle_en.properties');
           assert.equal(files[1].locale, 'en');
         });
     });
 
-    it('should find only EN CommonLabelsBundle file', function () {
+    it('should find only EN TestBundle file', function () {
       const resloader = new ResLoader()
         .path(`${__dirname}/data`)
-        .name('CommonLabelsBundle')
+        .name('TestBundle')
         .locales(['en'])
         ._resolveFiles().then((fileNames) => {
           assert.equal(fileNames.length, 1);
-          assert.equal(fileNames[0].file, 'CommonLabelsBundle_en.properties');
+          assert.equal(fileNames[0].file, 'TestBundle_en.properties');
           assert.equal(fileNames[0].locale, 'en');
         });
     });
@@ -55,7 +55,7 @@ describe('resloader', function () {
     it('should reject non-existing path', function () {
       expect(new ResLoader()
         .path(`${__dirname}/FOLDER_INVALID`)
-        .name('CommonLabelsBundle')
+        .name('TestBundle')
         .load()).to.be.rejected;
     });
   });
