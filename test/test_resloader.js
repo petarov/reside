@@ -1,19 +1,18 @@
-// resloader - test_resloader.js
+// resloader tests
 
 const ResLoader = require('../src/resloader/resloader');
 
 const assert = require('assert');
-const chai = require('chai');
-const expect = require('chai').expect;
-const chaiAsPromised = require('chai-as-promised');
-
+const chai = require('chai'),
+  expect = require('chai').expect,
+  chaiAsPromised = require('chai-as-promised');
 chai.use(chaiAsPromised);
 
-describe('resloader', function () {
+describe('resloader', () => {
 
-  describe('#_resolveFiles()', function () {
-    it('should resolve TestBundle files by given locales', function () {
-      const resloader = new ResLoader()
+  describe('#_resolveFiles()', () => {
+    it('should resolve TestBundle files by given locales', () => {
+      return new ResLoader()
         .path(`${__dirname}/data`)
         .name('TestBundle')
         .locales(['de', 'en'])
@@ -26,8 +25,8 @@ describe('resloader', function () {
         });
     });
 
-    it('should find all TestBundle files by path', function () {
-      const resloader = new ResLoader()
+    it('should find all TestBundle files by path', () => {
+      return new ResLoader()
         .path(`${__dirname}/data`)
         .name('TestBundle')
         ._resolveFiles().then((files) => {
@@ -39,8 +38,8 @@ describe('resloader', function () {
         });
     });
 
-    it('should find only EN TestBundle file', function () {
-      const resloader = new ResLoader()
+    it('should find only EN TestBundle file', () => {
+      return new ResLoader()
         .path(`${__dirname}/data`)
         .name('TestBundle')
         .locales(['en'])
@@ -52,8 +51,8 @@ describe('resloader', function () {
     });
   });
 
-  describe('#load()', function () {
-    it('should reject non-existing path', function () {
+  describe('#load()', () => {
+    it('should reject non-existing path', () => {
       expect(new ResLoader()
         .path(`${__dirname}/FOLDER_INVALID`)
         .name('TestBundle')
@@ -61,18 +60,18 @@ describe('resloader', function () {
     });
   });
 
-  describe('#load()', function () {
-    it('should load TestBundle files', function () {
-      new ResLoader()
+  describe('#load()', () => {
+    it('should load TestBundle files', () => {
+      return new ResLoader()
         .path(`${__dirname}/data`)
         .name('TestBundle')
-        .load().then((mapped) => {
+        .load().then((result) => {
+          const {keys, mapped} = result;
+          assert.notEqual(keys, null);
+          assert.notEqual(keys, {});
           assert.equal(mapped.size, 2);
           assert.equal(mapped.get('TestBundle_de.properties').locale, 'de');
           assert.equal(mapped.get('TestBundle_en.properties').locale, 'en');
-          // console.log(mapped.get('TestBundle_de.properties').strings);
-        }).catch((e) => {
-          assert.fail('Failed loading TestBundle files!');
         });
     });
   });
