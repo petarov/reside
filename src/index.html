@@ -54,8 +54,8 @@
               </ul>
             </div>
 
-            <div class="block-title">Translation Keys</div>
-            <div class="list links-list" id="nav-strings">
+            <div class="block-title">Labels</div>
+            <div class="list links-list" id="nav-labels">
               <!-- tpl-strings -->
             </div>
             
@@ -64,11 +64,11 @@
       </div>
     </div>
 
-    <script id="tpl-strings" type="text/template7">
+    <script id="tpl-labels" type="text/template7">
       <ul>
         {{#each strings}}
         <li>
-          <a href="#">{{@key}}</a>
+          <a href="#" class="label">{{@key}}</a>
         </li>
         {{/each}}
       </ul>
@@ -128,26 +128,36 @@
         <div class="page-content">
 
           <div class="list no-hairlines-md">
-            <ul>
+
+            <script id="tpl-translations" type="text/template7">
               <li class="item-content item-input">
                 <div class="item-inner">
-                  <div class="item-title item-label">Translation Key</div>
+                  <div class="item-title item-label">Label</div>
                   <div class="item-input-wrap">
-                    <input type="text" placeholder="Unique translation key string">
+                    <input type="text" placeholder="Unique translation key string" value="{{key}}">
                     <span class="input-clear-button"></span>
                   </div>
                 </div>
               </li>
               <li>
+              {{#each translations}}
               <li class="item-content item-input">
                 <div class="item-inner">
-                  <div class="item-title item-label">Translation Text</div>
+                  <div class="item-title item-label">{{locale}}</div>
                   <div class="item-input-wrap">
-                    <textarea class="resizable" placeholder="Single or multi line translation text"></textarea>
+                    <textarea class="resizable" placeholder="Single or multi line translation text">{{value}}</textarea>
                     <span class="input-clear-button"></span>
                   </div>
                 </div>
               </li>
+              {{/each}}
+            </script>
+
+            <ul id="edit-translations">
+              <!-- tpl-translations -->
+            </ul>
+
+            <ul>
               <li class="item-content">
                 <div class="item-inner item-cell">
                   

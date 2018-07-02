@@ -66,12 +66,12 @@ describe('resloader', () => {
         .path(`${__dirname}/data`)
         .name('TestBundle')
         .load().then((result) => {
-          const {strings, mapped} = result;
+          const {strings, bundles} = result;
           assert.notEqual(strings, null);
           assert.notEqual(strings, {});
-          assert.equal(mapped.size, 2);
-          assert.equal(mapped.get('TestBundle_de.properties').locale, 'de');
-          assert.equal(mapped.get('TestBundle_en.properties').locale, 'en');
+          assert.equal(bundles.size, 2);
+          assert.equal(bundles.get('TestBundle_de.properties').locale, 'de');
+          assert.equal(bundles.get('TestBundle_en.properties').locale, 'en');
         });
     });
   });

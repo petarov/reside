@@ -46,14 +46,20 @@ class ResideApp {
     });
 
     // bind templates
-    this._templates = {};
-    this._templates.strings = Template7.compile($$('script#tpl-strings').html());
+    this._templates = {
+      labels: Template7.compile($$('script#tpl-labels').html()),
+      translations: Template7.compile($$('script#tpl-translations').html())
+    };
 
+    this._bundles = null;
     this._app = app;
-    this.attachListeners();
+    this.attachMenuListeners();
   }
 
-  attachListeners() {
+  attachMenuListeners() {
+    /**
+     * Menus
+     */
     $$('.menu-open').on('click', (e) => {
       dialog.showOpenDialog({
         title: 'Select a bundle file',
@@ -70,18 +76,20 @@ class ResideApp {
         new ResLoader().path(dirname).name(name).load().then((result) => {
           this._app.dialog.close(); // close progress
 
-          const { mapped, strings } = result;
+          const { bundles, strings } = result;
 
-          if (mapped.size > 0) {
-            const html = this._templates.strings({ strings });
-            $$('#nav-strings').html(html);
+          if (bundles.size > 0) {
+            const html = this._templates.labels({ strings });
+            $$('#nav-labels').html(html);
+            this._bundles = bundles;
+            this.attachTapListeners();
           } else {
             this._app.dialog.alert('No strings found in file!', 'Invalid bundle file');
           }
 
         }).catch((e) => {
           this._app.dialog.close(); // close progress
-          console.error(e);
+          console.error('Failed loading file!', e);
           this._app.dialog.alert('Failed loading file!');
         });
       });
@@ -92,6 +100,24 @@ class ResideApp {
         ipcRenderer.sendSync('_quit');
       });
     });
+  }
+
+  attachTapListeners() {
+    $$('.label').on('click', (e) => {
+      const key = e.target.text;
+
+      const html = this._templates.translations({
+        key, 
+        translations: Array.from(this._bundles.values()).map((v) => {
+          return { 
+            locale: v.locale.toUpperCase(),
+            value: v.get(key)
+          };
+        })
+      });
+      $$('#edit-translations').html(html);
+    });
+
   }
 
   get app() {
