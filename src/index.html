@@ -42,23 +42,10 @@
           </div>
 
           <div class="page-content">
-            <div class="block-title">Locale</div>
-            <div class="list links-list">
-              <ul>
-                  <li class="item-content item-input">
-                    <select placeholder="Switch locale">
-                      <option value="en">en</option>
-                      <option value="de">de</option>
-                    </select>
-                  </li>
-              </ul>
-            </div>
-
             <div class="block-title">Labels</div>
             <div class="list links-list" id="nav-labels">
               <!-- tpl-strings -->
             </div>
-            
           </div>
         </div>
       </div>
@@ -134,7 +121,7 @@
                 <div class="item-inner">
                   <div class="item-title item-label">Label</div>
                   <div class="item-input-wrap">
-                    <input type="text" placeholder="Unique translation key string" value="{{key}}">
+                    <input type="text" placeholder="Unique translation key string" value="{{label}}">
                     <span class="input-clear-button"></span>
                   </div>
                 </div>
@@ -157,7 +144,7 @@
               <!-- tpl-translations -->
             </ul>
 
-            <ul>
+            <ul id="edit-translations-buttons">
               <li class="item-content">
                 <div class="item-inner item-cell">
                   

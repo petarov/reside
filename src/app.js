@@ -57,6 +57,7 @@ class ResideApp {
     this._app = app;
     this._searchTimeout = null;
     this.attachMenuListeners();
+    this.editLabel(false);
   }
 
   attachMenuListeners() {
@@ -149,8 +150,10 @@ class ResideApp {
         })
       });
       $$('#edit-translations').html(html);
+      Utils.cssVisible('#edit-translations-buttons', true);
     } else {
       $$('#edit-translations').html('');
+      Utils.cssVisible('#edit-translations-buttons', false);
     }
   }
 
