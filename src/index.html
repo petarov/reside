@@ -55,21 +55,24 @@
             </div>
 
             <div class="block-title">Translation Keys</div>
-            <div class="list links-list">
-              <ul>
-                <li>
-                  <a href="#">Translation 1</a>
-                </li>
-                <li>
-                  <a href="#">Translation 2</a>
-                </li>
-              </ul>
+            <div class="list links-list" id="nav-trans">
+              <!-- tpl-translations -->
             </div>
             
           </div>
         </div>
       </div>
     </div>
+
+    <script id="tpl-translations" type="text/template7">
+      <ul>
+        {{#each strings}}
+        <li>
+          <a href="#">{{@key}}</a>
+        </li>
+        {{/each}}
+      </ul>
+    </script>
 
     <!-- Your main view, should have "view-main" class -->
     <div class="view view-main ios-edges">

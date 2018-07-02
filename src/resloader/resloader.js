@@ -63,8 +63,8 @@ class ResLoader {
         fs.readdir(this._path, (err, files) => {
           resolve(
             files.filter(
-              file => file.startsWith(this._name) && file.endsWith('.properties'))
-            .map((file) => {
+              file => file.startsWith(this._name) && file.endsWith('.properties')
+            ).map((file) => {
               let locale = path.basename(file, path.extname(file)).split('_')[1];
               return {
                 file,
@@ -73,6 +73,7 @@ class ResLoader {
             })
           );
         });
+
       }
     });
   }

@@ -1,6 +1,7 @@
 // resloader - test_resloader.js
 
 const ResLoader = require('../src/resloader/resloader');
+
 const assert = require('assert');
 const chai = require('chai');
 const expect = require('chai').expect;
