@@ -64,7 +64,7 @@
     <!-- Your main view, should have "view-main" class -->
     <div class="view view-main ios-edges">
       <!-- Initial Page, "data-name" contains page name -->
-      <div data-name="home" class="page">
+      <div data-name="main" class="page">
 
         <!-- Top Navbar -->
         <div class="navbar">
@@ -95,7 +95,7 @@
                   <a href="#" class="link menu-save-as">
                     Save As
                   </a>
-                  <a href="#" class="link menu-settings">
+                  <a href="/settings" class="link menu-settings">
                     <i class="icon material-icons">settings</i>
                     Settings
                   </a>
@@ -188,9 +188,48 @@
             </div>
           </div> -->
 
-        </div>
-    </div>
+      </div>
+    </div><!-- end: main -->
 
+    <!-- Settings Page -->
+    <div data-name="settings" class="page">
+    
+      <!-- Top Navbar -->
+      <div class="navbar">
+        <div class="navbar-inner">
+          <div class="left">
+            <a href="#" class="link icon-only panel-open" data-panel="left">
+              <i class="icon material-icons">menu</i>
+            </a>
+          </div>
+          <div class="title sliding">Settings</div>
+        </div>
+      </div>
+    
+      <div class="page-content">
+        <ul>
+          <li class="item-content">
+            <div class="item-inner item-cell">
+    
+              <div class="item-row">
+                <div class="item-cell" style="width: 180px">
+       
+                </div>
+    
+                <div class="item-cell" style="width: 180px">
+                </div>
+    
+                <div class="item-cell"></div>
+              </div>
+    
+            </div>
+          </li>
+    
+        </ul>
+      </div>
+    
+    </div><!-- end: settings -->
+    
   </div>
 
   <script>

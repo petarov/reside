@@ -29,23 +29,27 @@ class ResideApp {
         leftBreakpoint: 960,
       },
 
-      routes: [
-        {
-          path: '/about/',
-          url: 'about.html',
-        },
-      ],
-
     });
 
     // left panel view
     this.leftView = app.views.create('.view-left', {
-      url: '/'
+      el: '.view-left'
     });
 
     // main view
     this.mainView = app.views.create('.view-main', {
-      url: '/'
+      el: '.view-main',
+      pageName: 'main',
+      routesAdd: [
+        {
+          path: '/main/',
+          pageName: 'main',
+        },
+        {
+          path: '/settings/',
+          pageName: 'settings',
+        },
+      ],
     });
 
     // bind templates
@@ -98,7 +102,8 @@ class ResideApp {
     });
 
     $$('.menu-settings').on('click', (e) => {
- 
+
+
     });
 
     $$('.menu-save').on('click', (e) => {
