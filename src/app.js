@@ -7,8 +7,10 @@ const Framework7 = require('framework7');
 const Template7 = require('template7');
 const $$ = Dom7;
 
-const ResLoader = require('./resloader/resloader');
-const Utils = require('./utils');
+const ResLoader = require('./resloader/resloader'),
+  Utils = require('./utils'),
+  Defs = require('./defs');
+
 
 class ResideApp {
 
@@ -65,10 +67,7 @@ class ResideApp {
       dialog.showOpenDialog({
         title: 'Select a bundle file',
         properties: ['openFile'],
-        filters: [
-          {name: 'Properties', extensions: ['properties']},
-          {name: 'All files', extensions: ['*']}
-        ]
+        filters: Defs.SUPPORTED_EXTENSIONS,
       }, (filePaths) => {
         const {dirname, name} = Utils.getBundleName(filePaths[0]);
         
@@ -80,8 +79,7 @@ class ResideApp {
           const { bundles, strings } = result;
 
           if (bundles.size > 0) {
-            const labels = Object.keys(strings).map((key) => key);
-            this._labels = labels;
+            this._labels = Object.keys(strings).map((key) => key);
             this._bundles = bundles;
             this.filterLabels();
             this.attachTapListeners();
@@ -120,7 +118,7 @@ class ResideApp {
             this._searchTimeout = null;
             // apply filter
             this.filterLabels($$(searchId).val());
-          }, 1100);
+          }, Defs.SEARCH_TIMEOUT);
         }
       }
     });
@@ -150,6 +148,7 @@ class ResideApp {
           };
         })
       });
+      $$('#edit-translations').html(html);
     } else {
       $$('#edit-translations').html('');
     }
