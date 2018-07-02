@@ -16,7 +16,8 @@ class ResBundle {
     // TODO
   }
 
-  reload() {
+  reload(strings) {
+    strings = strings || {};
     return new Promise((resolve, reject) => {
       console.log(`Loading ${this._filepath} ...`);
 
@@ -29,7 +30,13 @@ class ResBundle {
         const parts = line.split('=', 2);
         // this.strings[parts[0].trim()] = decodeURIComponent(parts[1].trim());
         // TODO: find a proper way to do this
-        this.strings[parts[0].trim()] = decodeURIComponent(JSON.parse('"' + parts[1].replace(/\"/g, '\\"') + '"'));
+        try {
+          this.strings[parts[0].trim()] = decodeURIComponent(JSON.parse('"' + parts[1].replace(/\"/g, '\\"') + '"'));
+        } catch (e) {
+          this.strings[parts[0].trim()] = parts[1];
+        }
+
+        strings[parts[0].trim()] = null;
       });
 
       lineReader.on('close', () => {

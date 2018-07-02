@@ -35,21 +35,21 @@ class ResideApp {
 
     });
 
-    // Init/Create left panel view
+    // left panel view
     this.leftView = app.views.create('.view-left', {
       url: '/'
     });
 
-    // Init/Create main view
+    // main view
     this.mainView = app.views.create('.view-main', {
       url: '/'
     });
 
-    var translationsTemplate = $$('script#tpl-translations').html();
-    this._compiledTranslationsTemplate = Template7.compile(translationsTemplate);
+    // bind templates
+    this._templates = {};
+    this._templates.strings = Template7.compile($$('script#tpl-strings').html());
 
     this._app = app;
-
     this.attachListeners();
   }
 
@@ -63,33 +63,28 @@ class ResideApp {
           {name: 'All files', extensions: ['*']}
         ]
       }, (filePaths) => {
-        console.log(filePaths);
-        const components = Utils.getBundleName(filePaths[0]);
-        console.log(components);
-        new ResLoader()
-          .path(components.dirname)
-          .name(components.name)
-          .load().then((mapped) => {
-            if (mapped.size > 0) {
-              const html = this._compiledTranslationsTemplate(
-                { strings: mapped.get('TestBundle_de.properties').strings });
-              $$('#nav-trans').html(html);
-            } else {
-              this._app.dialog.alert('No keys found in file!', 'Invalid bundle');
-            }
-          }).catch((e) => {
-            console.error(e);
-            this._app.dialog.alert('Failed loading file!');
-          });
+        const {dirname, name} = Utils.getBundleName(filePaths[0]);
+        
+        this._app.dialog.progress(); // open progress
+
+        new ResLoader().path(dirname).name(name).load().then((result) => {
+          this._app.dialog.close(); // close progress
+
+          const { mapped, strings } = result;
+
+          if (mapped.size > 0) {
+            const html = this._templates.strings({ strings });
+            $$('#nav-strings').html(html);
+          } else {
+            this._app.dialog.alert('No strings found in file!', 'Invalid bundle file');
+          }
+
+        }).catch((e) => {
+          this._app.dialog.close(); // close progress
+          console.error(e);
+          this._app.dialog.alert('Failed loading file!');
+        });
       });
-      // const html = this._compiledTranslationsTemplate({strings: 
-      //   {
-      //     'Trans1': 'value1',
-      //     'Trans2': 'value2'
-      //   }
-      // });
-      // $$('#nav-trans').html(html);
-      // console.log(html);
     });
 
     $$('.menu-quit').on('click', (e) => {
