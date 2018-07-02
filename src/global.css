@@ -5,3 +5,8 @@
 .label {
   font-size: 90%;
 }
+
+textarea.text-edit {
+  /* height: auto !important; */
+  resize: vertical !important;
+}

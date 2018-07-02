@@ -1,8 +1,15 @@
 // resbundle.js
 
-const fs = require('fs');
-const readline = require('readline');
-const assert = require('assert');
+const fs = require('fs'),
+  path = require('path'),
+  readline = require('readline'),
+  assert = require('assert');
+
+const NewlineMode = {
+  LF: '\\n',
+  CRLF: '\\r\\n',
+  BR: '<br>'
+};
 
 class ResBundle {
 
@@ -13,14 +20,26 @@ class ResBundle {
     this._strings = {};
   }
 
-  save(newName) {
+  save(name, nlm) {
     // TODO
+    //name = name || this._name;
+    const savePath = this._filepath.replace('.properties', '_01.properties.txt');
+    console.debug(`Saving ${savePath} ...`);
+
+    const stream = fs.createWriteStream(savePath);
+    stream.once('open', function (fd) {
+      for (const k in this._strings) {
+        const line = this._strings[k].replace(/\n/g, nlm);
+        stream.write(`${k}=${line}\n`);
+      }
+      stream.end();
+    }.bind(this));
   }
 
   reload(strings) {
     strings = strings || {};
     return new Promise((resolve, reject) => {
-      console.log(`Loading ${this._filepath} ...`);
+      console.debug(`Loading ${this._filepath} ...`);
 
       const lineReader = readline.createInterface({
         input: fs.createReadStream(this._filepath)
@@ -32,9 +51,9 @@ class ResBundle {
         // this.strings[parts[0].trim()] = decodeURIComponent(parts[1].trim());
         // TODO: find a proper way to do this
         try {
-          this.strings[parts[0].trim()] = decodeURIComponent(JSON.parse('"' + parts[1].replace(/\"/g, '\\"') + '"'));
+          this.strings[parts[0].trim()] = decodeURIComponent(JSON.parse('"' + parts[1].trim().replace(/\"/g, '\\"') + '"'));
         } catch (e) {
-          this.strings[parts[0].trim()] = parts[1];
+          this.strings[parts[0].trim()] = parts[1].trim();
         }
 
         strings[parts[0].trim()] = null;
@@ -62,7 +81,7 @@ class ResBundle {
     return Object.keys(this._strings).length;
   }
 
-  put(key, value) {
+  set(key, value) {
     assert(key !== null);
     assert(value !== null);
     this._strings[key] = value;
@@ -80,4 +99,7 @@ class ResBundle {
 
 }
 
-module.exports = ResBundle;
+module.exports = {
+  ResBundle,
+  NewlineMode
+}

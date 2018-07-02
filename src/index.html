@@ -132,8 +132,9 @@
                 <div class="item-inner">
                   <div class="item-title item-label">{{locale}}</div>
                   <div class="item-input-wrap">
-                    <textarea class="resizable" placeholder="Single or multi line translation text">{{value}}</textarea>
-                    <span class="input-clear-button"></span>
+                    <textarea class="resizable text-edit" 
+                      data-label="{{../label}}" data-bundle="{{bundle}}"
+                      placeholder="Single or multi line translation text">{{value}}</textarea>
                   </div>
                 </div>
               </li>

@@ -3,7 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 const readline = require('readline');
-const ResBundle = require('./resbundle');
+const { ResBundle } = require('./resbundle');
 
 class ResLoader {
 

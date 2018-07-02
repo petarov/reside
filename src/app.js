@@ -8,6 +8,7 @@ const Template7 = require('template7');
 const $$ = Dom7;
 
 const ResLoader = require('./resloader/resloader'),
+  { NewlineMode } = require('./resloader/resbundle'),
   Utils = require('./utils'),
   Defs = require('./defs');
 
@@ -83,7 +84,7 @@ class ResideApp {
             this._labels = Object.keys(strings).map((key) => key);
             this._bundles = bundles;
             this.filterLabels();
-            this.attachTapListeners();
+            this.attachLabelListeners();
           } else {
             this._app.dialog.alert('No strings found in file!', 'Invalid bundle file');
           }
@@ -96,6 +97,21 @@ class ResideApp {
       });
     });
 
+    $$('.menu-settings').on('click', (e) => {
+ 
+    });
+
+    $$('.menu-save').on('click', (e) => {
+      // const dialog = this._app.dialog.confirm('Are you sure?', 'Quit App', () => {
+      //   ipcRenderer.sendSync('_quit');
+      // });
+      if (this._bundles) {
+        for (const bundle of this._bundles.values()) {
+          bundle.save('', NewlineMode.LF);
+        }
+      }
+    });
+
     $$('.menu-quit').on('click', (e) => {
       const dialog = this._app.dialog.confirm('Are you sure?', 'Quit App', () => {
         ipcRenderer.sendSync('_quit');
@@ -103,7 +119,7 @@ class ResideApp {
     });
   }
 
-  attachTapListeners() {
+  attachLabelListeners() {
     const searchId = 'input[type="search"]';
 
     $$('.label').on('click', (e) => {
@@ -123,7 +139,16 @@ class ResideApp {
         }
       }
     });
+  }
 
+  attachEditListeners() {
+    $$('textarea.text-edit').on('keyup', function(e) {
+      const bundleName = $$(e.target).data('bundle');
+      const label = $$(e.target).data('label');
+      // TODO format
+      const bundle = this._bundles.get(bundleName);
+      bundle.set(label, e.target.value);
+    }.bind(this));
   }
 
   filterLabels(expr) {
@@ -142,18 +167,20 @@ class ResideApp {
     if (label) {
       html = this._templates.translations({
         label,
-        translations: Array.from(this._bundles.values()).map((v) => {
+        translations: Array.from(this._bundles.entries()).map((v) => {
           return {
-            locale: v.locale.toUpperCase(),
-            value: v.get(label)
+            bundle: v[0],
+            locale: v[1].locale.toUpperCase(),
+            value: v[1].get(label)
           };
         })
       });
       $$('#edit-translations').html(html);
-      Utils.cssVisible('#edit-translations-buttons', true);
+      ResideApp.cssVisible('#edit-translations-buttons', true);
+      this.attachEditListeners();
     } else {
       $$('#edit-translations').html('');
-      Utils.cssVisible('#edit-translations-buttons', false);
+      ResideApp.cssVisible('#edit-translations-buttons', false);
     }
   }
 
@@ -161,6 +188,9 @@ class ResideApp {
     return this._app;
   }
 
+  static cssVisible(id, visible) {
+    $$(id).css('visibility', visible ? 'visible' : 'hidden');
+  }
 }
 
 module.exports = ResideApp;
