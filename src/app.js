@@ -53,6 +53,7 @@ class ResideApp {
 
     this._bundles = null;
     this._app = app;
+    this._searchTimeout = null;
     this.attachMenuListeners();
   }
 
@@ -79,9 +80,10 @@ class ResideApp {
           const { bundles, strings } = result;
 
           if (bundles.size > 0) {
-            const html = this._templates.labels({ strings });
-            $$('#nav-labels').html(html);
+            const labels = Object.keys(strings).map((key) => key);
+            this._labels = labels;
             this._bundles = bundles;
+            this.filterLabels();
             this.attachTapListeners();
           } else {
             this._app.dialog.alert('No strings found in file!', 'Invalid bundle file');
@@ -103,21 +105,54 @@ class ResideApp {
   }
 
   attachTapListeners() {
-    $$('.label').on('click', (e) => {
-      const key = e.target.text;
+    const searchId = 'input[type="search"]';
 
-      const html = this._templates.translations({
-        key, 
+    $$('.label').on('click', (e) => {
+      this.editLabel(e.target.text);
+    });
+
+    $$(searchId).on('keyup', (e) => {
+      if (!e.shiftKey && !e.ctrlKey && !e.altKey) {
+        if (!this._searchTimeout) {
+          this._searchTimeout = setTimeout(() => {
+            // cancel timer
+            clearTimeout(this._searchTimeout);
+            this._searchTimeout = null;
+            // apply filter
+            this.filterLabels($$(searchId).val());
+          }, 1100);
+        }
+      }
+    });
+
+  }
+
+  filterLabels(expr) {
+    if (expr) {
+      const filtered = this._labels.filter((v) => v.startsWith(expr));
+      const html = this._templates.labels({ labels: filtered });
+      $$('#nav-labels').html(html);
+    } else {
+      // no filter -> just show all labels
+      $$('#nav-labels').html(this._templates.labels({ labels: this._labels }));
+    }
+  }
+
+  editLabel(label) {
+    let html;
+    if (label) {
+      html = this._templates.translations({
+        label,
         translations: Array.from(this._bundles.values()).map((v) => {
-          return { 
+          return {
             locale: v.locale.toUpperCase(),
-            value: v.get(key)
+            value: v.get(label)
           };
         })
       });
-      $$('#edit-translations').html(html);
-    });
-
+    } else {
+      $$('#edit-translations').html('');
+    }
   }
 
   get app() {
