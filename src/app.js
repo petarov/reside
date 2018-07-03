@@ -94,7 +94,6 @@ class ResideApp {
           } else {
             this._app.dialog.alert('No strings found in file!', 'Invalid bundle file');
           }
-
         }).catch((e) => {
           this._app.dialog.close(); // close progress
           console.error('Failed loading file!', e);
@@ -125,7 +124,8 @@ class ResideApp {
     const searchId = 'input[type="search"]';
 
     $$('.label').on('click', (e) => {
-      this.editLabel(e.target.text);
+      const text = $$(e.target).text() || $$(e.target).find('.item-title').text();
+      this.editLabel(text);
     });
 
     $$(searchId).on('keyup', (e) => {
@@ -154,14 +154,18 @@ class ResideApp {
   }
 
   filterLabels(expr) {
+    let labels = this._templates.labels;
+
     if (expr) {
-      const filtered = this._labels.filter((v) => v.startsWith(expr));
-      const html = this._templates.labels({ labels: filtered });
-      $$('#nav-labels').html(html);
-    } else {
-      // no filter -> just show all labels
-      $$('#nav-labels').html(this._templates.labels({ labels: this._labels }));
+      labels = this._labels.filter((v) => v.startsWith(expr));
     }
+
+    this._app.virtualList.destroy('#nav-labels');
+    this._app.virtualList.create({
+      el: '#nav-labels',
+      items: this._labels,
+      itemTemplate: this._templates.labels,
+    });
   }
 
   editLabel(label) {

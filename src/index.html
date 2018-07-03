@@ -43,7 +43,7 @@
 
           <div class="page-content">
             <div class="block-title">Labels</div>
-            <div class="list links-list" id="nav-labels">
+            <div class="list virtual-list" id="nav-labels">
               <!-- tpl-strings -->
             </div>
           </div>
@@ -52,13 +52,15 @@
     </div>
 
     <script id="tpl-labels" type="text/template7">
-      <ul>
-        {{#each labels}}
-        <li>
-          <a href="#" class="label">{{this}}</a>
-        </li>
-        {{/each}}
-      </ul>
+      <li>
+        <a href="#" class="item-link item-content label">
+          <div class="item-inner">
+            <div class="item-title-row">
+              <div class="item-title">{{this}}</div>
+            </div>
+          </div>
+        </a>
+      </li>
     </script>
 
     <!-- Your main view, should have "view-main" class -->
