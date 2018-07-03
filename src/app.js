@@ -54,8 +54,6 @@ class ResideApp {
       ],
     });
 
-    console.log(this.mainView );
-
     // bind templates
     this._templates = {
       labels: Template7.compile($$('script#tpl-labels').html()),
@@ -103,11 +101,6 @@ class ResideApp {
           this._app.dialog.alert('Failed loading file!');
         });
       });
-    });
-
-    $$('.menu-settings').on('click', (e) => {
-
-
     });
 
     $$('.menu-save').on('click', (e) => {
