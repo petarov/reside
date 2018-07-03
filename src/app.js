@@ -37,10 +37,12 @@ class ResideApp {
     });
 
     // main view
+    // @see: http://forum.framework7.io/t/how-compose-views-and-pages-right/2937/2
     this.mainView = app.views.create('.view-main', {
       el: '.view-main',
-      pageName: 'main',
-      routesAdd: [
+      pageName: 'settings',
+      //stackPages: true,
+      routes: [
         {
           path: '/main/',
           pageName: 'main',
@@ -51,6 +53,8 @@ class ResideApp {
         },
       ],
     });
+
+    console.log(this.mainView );
 
     // bind templates
     this._templates = {

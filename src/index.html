@@ -18,11 +18,11 @@
 
     <div class="panel panel-left">
       <div class="view view-left">
-        <div class="page">
+        <div class="page" data-name="nav">
 
           <div class="navbar">
             <div class="navbar-inner sliding">
-              <div class="title">Navigation</div>
+              <div class="title">Reside</div>
               
               <div class="subnavbar">
                 <!-- Searchbar inside of Subnavbar -->
@@ -63,9 +63,10 @@
 
     <!-- Your main view, should have "view-main" class -->
     <div class="view view-main ios-edges">
-      <!-- Initial Page, "data-name" contains page name -->
-      <div data-name="main" class="page">
 
+      <!-- main -->
+      <div data-name="main" class="page">
+      
         <!-- Top Navbar -->
         <div class="navbar">
           <div class="navbar-inner">
@@ -74,48 +75,48 @@
                 <i class="icon material-icons">menu</i>
               </a>
             </div>
-            <div class="title sliding">Reside</div>
+            <div class="title sliding">Translations</div>
           </div>
         </div>
-
+      
         <!-- Toolbar -->
         <div class="toolbar">
           <div class="toolbar-inner">
             <div class="col-33">
               <div class="row">
-                  <!-- Toolbar links -->
-                  <a href="#" class="link menu-open">
-                    <i class="icon material-icons">folder_open</i>
-                    Open
-                  </a>
-                  <a href="#" class="link menu-save">
-                    <i class="icon material-icons">save</i>
-                    Save
-                  </a>
-                  <a href="#" class="link menu-save-as">
-                    Save As
-                  </a>
-                  <a href="/settings" class="link menu-settings">
-                    <i class="icon material-icons">settings</i>
-                    Settings
-                  </a>
-                  <a href="#" class="link menu-quit">Quit</a>
-                </div>
+                <!-- Toolbar links -->
+                <a href="#" class="link menu-open">
+                  <i class="icon material-icons">folder_open</i>
+                  Open
+                </a>
+                <a href="#" class="link menu-save">
+                  <i class="icon material-icons">save</i>
+                  Save
+                </a>
+                <a href="#" class="link menu-save-as">
+                  Save As
+                </a>
+                <a href="/settings/" class="link menu-settings">
+                  <i class="icon material-icons">settings</i>
+                  Settings
+                </a>
+                <a href="#" class="link menu-quit">Quit</a>
               </div>
+            </div>
           </div>
         </div>
-
+      
         <!-- Scrollable page content -->
         <div class="fab fab-right-bottomh">
           <a href="#">
             <i class="icon material-icons">add</i>
           </a>
         </div>
-
+      
         <div class="page-content">
-
+      
           <div class="list no-hairlines-md">
-
+      
             <script id="tpl-translations" type="text/template7">
               <li class="item-content item-input">
                 <div class="item-inner">
@@ -140,97 +141,122 @@
               </li>
               {{/each}}
             </script>
-
+      
             <ul id="edit-translations">
               <!-- tpl-translations -->
             </ul>
-
+      
             <ul id="edit-translations-buttons">
               <li class="item-content">
                 <div class="item-inner item-cell">
-                  
-                    <div class="item-row">
-                      <div class="item-cell" style="width: 180px">
-                        <button class="col button button-fill">
-                          <i class="icon material-icons">content_copy</i>
-                          Clone
-                        </button>
-                      </div>
-
-                      <div class="item-cell" style="width: 180px">
-                        <button class="col button button-outline">
-                          <i class="icon material-icons">delete</i>
-                          Delete
-                        </button>
-                      </div>
-
-                      <div class="item-cell"></div>
+      
+                  <div class="item-row">
+                    <div class="item-cell" style="width: 180px">
+                      <button class="col button button-fill">
+                        <i class="icon material-icons">content_copy</i>
+                        Clone
+                      </button>
                     </div>
-
+      
+                    <div class="item-cell" style="width: 180px">
+                      <button class="col button button-outline">
+                        <i class="icon material-icons">delete</i>
+                        Delete
+                      </button>
+                    </div>
+      
+                    <div class="item-cell"></div>
+                  </div>
+      
                 </div>
               </li>
-              
+      
+            </ul>
+          </div>
+      
+          <!-- <div class="row">
+                      <div class="col-50">
+                        <div class="row">
+                          <button class="col button button-fill">
+                            <i class="icon material-icons">content_copy</i>
+                            Clone
+                          </button>
+                          <button class="col button button-outline">
+                            <i class="icon material-icons">delete</i>
+                            Delete
+                          </button>
+                        </div>
+                      </div>
+                    </div> -->
+      
+        </div>
+      </div>
+      <!-- end: main -->
+      
+      <!-- settings -->
+      <div data-name="settings" class="page stacked">
+      
+        <!-- Top Navbar -->
+        <div class="navbar">
+          <div class="navbar-inner">
+            <div class="left">
+              <a href="#" class="link icon-only panel-open" data-panel="left">
+                <i class="icon material-icons">menu</i>
+              </a>
+            </div>
+            <div class="title sliding">Settings</div>
+          </div>
+        </div>
+
+        <!-- Toolbar -->
+        <div class="toolbar">
+          <div class="toolbar-inner">
+            <div class="col-5">
+              <div class="row">
+                <!-- Toolbar links -->
+                <a href="/main/" class="link">
+                  <i class="icon material-icons" style="width: 42px">arrow_back_ios</i>
+                  Back
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      
+        <div class="page-content">
+
+          <div class="block-title">Save File Encoding</div>
+          <div class="list">
+            <ul>
+              <li>
+                <label class="item-radio item-content">
+                  <input type="radio" name="encoding" value="utf8" checked />
+                  <i class="icon icon-radio"></i>
+                  <div class="item-inner">
+                    <div class="item-title">UTF-8</div>
+                  </div>
+                </label>
+              </li>
+              <li>
+                <label class="item-radio item-content">
+                  <input type="radio" name="encoding" value="ascii"  />
+                  <i class="icon icon-radio"></i>
+                  <div class="item-inner">
+                    <div class="item-title">ASCII</div>
+                  </div>
+                </label>
+              </li>
             </ul>
           </div>
 
-          <!-- <div class="row">
-            <div class="col-50">
-              <div class="row">
-                <button class="col button button-fill">
-                  <i class="icon material-icons">content_copy</i>
-                  Clone
-                </button>
-                <button class="col button button-outline">
-                  <i class="icon material-icons">delete</i>
-                  Delete
-                </button>
-              </div>
-            </div>
-          </div> -->
-
-      </div>
-    </div><!-- end: main -->
-
-    <!-- Settings Page -->
-    <div data-name="settings" class="page">
-    
-      <!-- Top Navbar -->
-      <div class="navbar">
-        <div class="navbar-inner">
-          <div class="left">
-            <a href="#" class="link icon-only panel-open" data-panel="left">
-              <i class="icon material-icons">menu</i>
-            </a>
-          </div>
-          <div class="title sliding">Settings</div>
         </div>
+      
       </div>
-    
-      <div class="page-content">
-        <ul>
-          <li class="item-content">
-            <div class="item-inner item-cell">
-    
-              <div class="item-row">
-                <div class="item-cell" style="width: 180px">
-       
-                </div>
-    
-                <div class="item-cell" style="width: 180px">
-                </div>
-    
-                <div class="item-cell"></div>
-              </div>
-    
-            </div>
-          </li>
-    
-        </ul>
-      </div>
-    
-    </div><!-- end: settings -->
-    
-  </div>
+      <!-- end: settings -->
+
+    </div>
+
+  </div><!-- end: app -->
 
   <script>
     require('./renderer.js')
