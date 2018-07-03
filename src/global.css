@@ -8,5 +8,6 @@
 
 textarea.text-edit {
   /* height: auto !important; */
+  min-height: 55px !important;
   resize: vertical !important;
 }
