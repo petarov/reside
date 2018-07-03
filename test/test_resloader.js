@@ -71,7 +71,9 @@ describe('resloader', () => {
           assert.notEqual(strings, {});
           assert.equal(bundles.size, 2);
           assert.equal(bundles.get('TestBundle_de.properties').locale, 'de');
+          assert.equal(bundles.get('TestBundle_de.properties').size, 20);
           assert.equal(bundles.get('TestBundle_en.properties').locale, 'en');
+          assert.equal(bundles.get('TestBundle_en.properties').size, 19);
         });
     });
   });

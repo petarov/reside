@@ -44,19 +44,36 @@ class ResBundle {
       const lineReader = readline.createInterface({
         input: fs.createReadStream(this._filepath)
       });
+
+      let utf16encoded = false;
   
       lineReader.on('line', (line) => {
         //console.log('Line: ', line);
-        const parts = line.split('=', 2);
-        // this.strings[parts[0].trim()] = decodeURIComponent(parts[1].trim());
-        // TODO: find a proper way to do this
-        try {
-          this.strings[parts[0].trim()] = decodeURIComponent(JSON.parse('"' + parts[1].trim().replace(/\"/g, '\\"') + '"'));
-        } catch (e) {
-          this.strings[parts[0].trim()] = parts[1].trim();
+        
+        // Comments starting with # // ;
+        if (line.startsWith('#') || line.startsWith('/') || line.startsWith(';')) {
+          console.debug(`Skipped comment line= ${line}`);
+          return;
         }
 
-        strings[parts[0].trim()] = null;
+        const parts = line.split('=', 2);
+        const left = parts[0].trim();
+        let right = parts[1].trim();
+
+        try {
+          if (utf16encoded || right.indexOf('\\u') > -1) {
+            utf16encoded = true;
+            this.strings[left] = JSON.parse(`"${right.replace(/\"/g, '\\"')}"`);
+          } else {
+            this.strings[left] = right;
+          }
+        } catch (e) {
+          console.error(`Failed parsing line= ${line}`);
+          // TODO: log error for given line
+          this.strings[left] = right;
+        }
+
+        strings[left] = null;
       });
 
       lineReader.on('close', () => {
