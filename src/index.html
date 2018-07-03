@@ -150,25 +150,21 @@
               </li>
               {{/each}}
             </script>
-      
-            <ul id="edit-translations">
-              <!-- tpl-translations -->
-            </ul>
-      
-            <ul id="edit-translations-buttons">
+
+            <script id="tpl-translations-actions" type="text/template7">
               <li class="item-content">
                 <div class="item-inner item-cell">
       
                   <div class="item-row">
                     <div class="item-cell" style="width: 180px">
-                      <button class="col button button-fill">
+                      <button class="col button button-fill action-clone" data-label="{{label}}">
                         <i class="icon material-icons">content_copy</i>
                         Clone
                       </button>
                     </div>
       
                     <div class="item-cell" style="width: 180px">
-                      <button class="col button button-outline">
+                      <button class="col button button-outline action-delete" data-label="{{label}}">
                         <i class="icon material-icons">delete</i>
                         Delete
                       </button>
@@ -179,7 +175,14 @@
       
                 </div>
               </li>
+            </script>
+
+            <ul id="edit-translations">
+              <!-- tpl-translations -->
+            </ul>
       
+            <ul id="edit-translations-actions">
+              <!-- tpl-translations -->
             </ul>
           </div>
       
@@ -201,10 +204,10 @@
         </div>
       </div>
       <!-- end: main -->
-      
+
       <!-- settings -->
       <div data-name="settings" class="page stacked">
-      
+
         <!-- Top Navbar -->
         <div class="navbar">
           <div class="navbar-inner">

@@ -12,6 +12,9 @@ const ResLoader = require('./resloader/resloader'),
   Utils = require('./utils'),
   Defs = require('./defs');
 
+const ID = {
+  search: 'input[type="search"]'
+};
 
 class ResideApp {
 
@@ -57,7 +60,8 @@ class ResideApp {
     // bind templates
     this._templates = {
       labels: Template7.compile($$('script#tpl-labels').html()),
-      translations: Template7.compile($$('script#tpl-translations').html())
+      translations: Template7.compile($$('script#tpl-translations').html()),
+      translationsActions: Template7.compile($$('script#tpl-translations-actions').html())
     };
 
     this._bundles = null;
@@ -89,8 +93,7 @@ class ResideApp {
           if (bundles.size > 0) {
             this._labels = Object.keys(strings).map((key) => key);
             this._bundles = bundles;
-            this.filterLabels();
-            this.attachLabelListeners();
+            this.filterLabels(false);
           } else {
             this._app.dialog.alert('No strings found in file!', 'Invalid bundle file');
           }
@@ -121,14 +124,12 @@ class ResideApp {
   }
 
   attachLabelListeners() {
-    const searchId = 'input[type="search"]';
-
     $$('.label').on('click', (e) => {
       const text = $$(e.target).text() || $$(e.target).find('.item-title').text();
       this.editLabel(text);
     });
 
-    $$(searchId).on('keyup', (e) => {
+    $$(ID.search).on('keyup', (e) => {
       if (!e.shiftKey && !e.ctrlKey && !e.altKey) {
         if (!this._searchTimeout) {
           this._searchTimeout = setTimeout(() => {
@@ -136,7 +137,7 @@ class ResideApp {
             clearTimeout(this._searchTimeout);
             this._searchTimeout = null;
             // apply filter
-            this.filterLabels($$(searchId).val());
+            this.filterLabels($$(ID.search).val());
           }, Defs.SEARCH_TIMEOUT);
         }
       }
@@ -147,25 +148,48 @@ class ResideApp {
     $$('textarea.text-edit').on('keyup', function(e) {
       const bundleName = $$(e.target).data('bundle');
       const label = $$(e.target).data('label');
-      // TODO format
       const bundle = this._bundles.get(bundleName);
       bundle.set(label, e.target.value);
     }.bind(this));
+
+    $$('.action-clone').on('click', (e) => {
+      // TODO
+    });
+
+    $$('.action-delete').on('click', (e) => {
+      const label = $$(e.target).data('label');
+      const dialog = this._app.dialog.confirm(`Delete ${label}?`, 
+      `Delete translation`, () => {
+        // hide edit translation pane        
+        this.editLabel(false);
+        // remove from all bundles
+        for (const bundle of this._bundles.values()) {
+          bundle.remove(label);
+        }
+        // update index
+        this._labels.splice(this._labels.findIndex((v) => v === label), 1);
+        this.filterLabels(false);
+      });
+    });
   }
 
   filterLabels(expr) {
-    let labels = this._templates.labels;
+    let labels = this._labels;
 
     if (expr) {
       labels = this._labels.filter((v) => v.startsWith(expr));
+    } else {
+      $$(ID.search).val('');
     }
 
     this._app.virtualList.destroy('#nav-labels');
     this._app.virtualList.create({
       el: '#nav-labels',
-      items: this._labels,
+      items: labels,
       itemTemplate: this._templates.labels,
     });
+
+    this.attachLabelListeners();
   }
 
   editLabel(label) {
@@ -182,11 +206,15 @@ class ResideApp {
         })
       });
       $$('#edit-translations').html(html);
-      ResideApp.cssVisible('#edit-translations-buttons', true);
+      $$('#edit-translations-actions').html(
+        this._templates.translationsActions({label}));
+
+      ResideApp.cssVisible('#edit-translations-actions', true);
+
       this.attachEditListeners();
     } else {
       $$('#edit-translations').html('');
-      ResideApp.cssVisible('#edit-translations-buttons', false);
+      ResideApp.cssVisible('#edit-translations-actions', false);
     }
   }
 
