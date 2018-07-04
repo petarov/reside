@@ -125,8 +125,9 @@ class ResideApp {
             this._bundles = bundles;
             this.filterLabels(false);
             // notify user
+            $$('#nav-title').text(name);
             this._app.toast.create({
-              text: `Loaded ${bundles.size} files for ${name}.`, 
+              text: `Loaded ${bundles.size} file(s) for ${name}.`, 
               closeTimeout: Defs.TOAST_NORMAL,
             }).open();
           } else {
