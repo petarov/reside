@@ -1,4 +1,5 @@
 // defs.js
+"use strict";
 
 module.exports = {
 
@@ -7,6 +8,8 @@ module.exports = {
 
   APP_WINDOW_WIDTH: 1440,
   APP_WINDOW_HEIGHT: 900,
+
+  CONFIG_NAME: '.reside-store.json',
   
   SEARCH_TIMEOUT: 1100, // ms
 
