@@ -86,11 +86,18 @@ class ResideApp {
   }
 
   attachSettingsListeners() {
+    const showToast = () => {
+      this._app.toast.create({
+        text: 'Settings saved.', closeTimeout: Defs.TOAST_SHORT,
+      }).open();
+    };
     $$(ID.cfgEncoding).on('click', (e) => {
       this.storage.settings('saveEncoding', e.target.value);
+      showToast();
     });
     $$(ID.cfgNewlines).on('click', (e) => {
       this.storage.settings('saveNewlines', e.target.value);
+      showToast();
     });
   }
 
@@ -117,34 +124,37 @@ class ResideApp {
             this._labels = Object.keys(strings).map((key) => key);
             this._bundles = bundles;
             this.filterLabels(false);
+            // notify user
+            this._app.toast.create({
+              text: `Loaded ${bundles.size} files for ${name}.`, 
+              closeTimeout: Defs.TOAST_NORMAL,
+            }).open();
           } else {
+            // notify user
             this._app.dialog.alert('No strings found in file!', 'Invalid bundle file');
           }
         }).catch((e) => {
           this._app.dialog.close(); // close progress
           console.error('Failed loading file!', e);
+          // notify user
           this._app.dialog.alert('Failed loading file!');
         });
       });
     });
 
     $$('.menu-save').on('click', (e) => {
-      const dialog = this._app.dialog.confirm('Are you sure?', 'Save File', () => {
-        if (this._bundles) {
-          let newlineMode;
-          switch (this.storage.settings('saveNewlines')) {
-            case 'crlf': newlineMode = NewlineMode.CRLF; break;
-            case 'br': newlineMode = NewlineMode.BR; break;
-            default:
-            case 'lf': newlineMode = NewlineMode.LF; break;
-          }
+      this._app.dialog.confirm(
+        'Are you sure?', 'Save File', () => this.saveBundles());
+    });
 
-          const encoding = this.storage.settings('saveEncoding');
-          for (const bundle of this._bundles.values()) {
-            bundle.save({ newlineMode, encoding });
+    $$('.menu-save-as').on('click', (e) => {
+      if (this._bundles) {
+        this._app.dialog.prompt('Enter a bundle name', 'Save File As', (value) => {
+          if (value) {
+            this.saveBundles(value);
           }
-        }
-      });
+        });
+      }
     });
 
     $$('.menu-quit').on('click', (e) => {
@@ -190,6 +200,11 @@ class ResideApp {
       for (const bundle of this._bundles.values()) {
         bundle.set(newLabel, '');
       }
+      // notify user
+      this._app.toast.create({
+        text: `Cloned ${label} to ${newLabel}.`,
+        closeTimeout: Defs.TOAST_NORMAL,
+      }).open();
       // update index
       this._labels.splice(
         this._labels.findIndex((v) => v === label), 0, newLabel);
@@ -208,6 +223,11 @@ class ResideApp {
         for (const bundle of this._bundles.values()) {
           bundle.remove(label);
         }
+        // notify user
+        this._app.toast.create({
+          text: `Removed ${label} translation.`,
+          closeTimeout: Defs.TOAST_NORMAL,
+        }).open();
         // update index
         this._labels.splice(this._labels.findIndex((v) => v === label), 1);
         this.filterLabels(false);
@@ -257,6 +277,23 @@ class ResideApp {
     } else {
       $$('#edit-translations').html('');
       ResideApp.cssVisible('#edit-translations-actions', false);
+    }
+  }
+
+  saveBundles(bundleName) {
+    if (this._bundles) {
+      let newlineMode;
+      switch (this.storage.settings('saveNewlines')) {
+        case 'crlf': newlineMode = NewlineMode.CRLF; break;
+        case 'br': newlineMode = NewlineMode.BR; break;
+        default:
+        case 'lf': newlineMode = NewlineMode.LF; break;
+      }
+
+      const encoding = this.storage.settings('saveEncoding');
+      for (const bundle of this._bundles.values()) {
+        bundle.save({ bundleName, newlineMode, encoding });
+      }
     }
   }
 

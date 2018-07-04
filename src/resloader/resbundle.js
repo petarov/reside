@@ -22,16 +22,19 @@ class ResBundle {
     this._strings = {};
   }
 
-  save(opts = { name: '', newlineMode: NewlineMode.LF, encoding: 'utf8' }) {
+  save(opts = { bundleName: '', newlineMode: NewlineMode.LF, encoding: 'utf8' }) {
     let savePath;
-    if (opts.name) {
-      if (!opts.name.endsWith('.properties')) {
-        savePath = opts.name + `_${this._locale}.properties`;
+    if (opts.bundleName) {
+      if (!opts.bundleName.endsWith('.properties')) {
+        opts.bundleName = opts.bundleName + `_${this._locale}.properties`;
+      } else {
+        opts.bundleName = opts.bundleName.replace('.properties', `_${this._locale}.properties`)
       }
+      savePath = path.join(path.dirname(this._filepath), opts.bundleName);
     } else {
       savePath = this._filepath;
     }
-    console.debug(`Saving to ${savePath} ...`);
+    console.debug(`Saving bundle to ${savePath} ...`);
 
     let utf8 = false;
     if ('utf8' === opts.encoding) {

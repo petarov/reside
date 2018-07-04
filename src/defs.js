@@ -19,4 +19,8 @@ module.exports = {
     { name: 'All files', extensions: ['*'] }
   ],
 
+  TOAST_SHORT: 1000,
+  TOAST_NORMAL: 2000,
+  TOAST_LONG: 3000,
+
 };
