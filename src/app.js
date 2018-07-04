@@ -154,14 +154,25 @@ class ResideApp {
     }.bind(this));
 
     $$('.action-clone').on('click', (e) => {
-      // TODO
+      const label = $$(e.target).data('label');
+      const newLabel = label + '_COPY';
+      // add to all bundles
+      for (const bundle of this._bundles.values()) {
+        bundle.set(newLabel, '');
+      }
+      // update index
+      this._labels.splice(
+        this._labels.findIndex((v) => v === label), 0, newLabel);
+      this.filterLabels(false);
+      // edit new element
+      this.editLabel(newLabel);
     });
 
     $$('.action-delete').on('click', (e) => {
       const label = $$(e.target).data('label');
       const dialog = this._app.dialog.confirm(`Delete ${label}?`, 
       `Delete translation`, () => {
-        // hide edit translation pane        
+        // hide edit translation pane
         this.editLabel(false);
         // remove from all bundles
         for (const bundle of this._bundles.values()) {
@@ -217,10 +228,6 @@ class ResideApp {
       $$('#edit-translations').html('');
       ResideApp.cssVisible('#edit-translations-actions', false);
     }
-  }
-
-  get app() {
-    return this._app;
   }
 
   static cssVisible(id, visible) {
