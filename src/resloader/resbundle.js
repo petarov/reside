@@ -45,7 +45,8 @@ class ResBundle {
         input: fs.createReadStream(this._filepath)
       });
 
-      let utf16encoded = false;
+      // true, if at least one ucs2/ucs2 encoded as ascii character is found
+      let ucs2 = false;
   
       lineReader.on('line', (line) => {
         //console.log('Line: ', line);
@@ -61,8 +62,8 @@ class ResBundle {
         let right = parts[1].trim();
 
         try {
-          if (utf16encoded || right.indexOf('\\u') > -1) {
-            utf16encoded = true;
+          if (ucs2 || right.indexOf('\\u') > -1) {
+            ucs2 = true;
             this.strings[left] = JSON.parse(`"${right.replace(/\"/g, '\\"')}"`);
           } else {
             this.strings[left] = right;

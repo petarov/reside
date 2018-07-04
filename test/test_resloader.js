@@ -1,6 +1,6 @@
 // resloader tests
 
-const ResLoader = require('../src/resloader/resloader');
+const { ResLoader } = require('../src/resloader');
 
 const assert = require('assert');
 const chai = require('chai'),

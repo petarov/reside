@@ -1,6 +1,6 @@
 // utils tests
 
-const Utils = require('../src/utils');
+const { Utils } = require('../src/utils');
 
 const assert = require('assert');
 const chai = require('chai'),

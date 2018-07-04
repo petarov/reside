@@ -8,10 +8,9 @@ const Framework7 = require('framework7');
 const Template7 = require('template7');
 const $$ = Dom7;
 
-const ResLoader = require('./resloader/resloader'),
-  { NewlineMode } = require('./resloader/resbundle'),
-  Utils = require('./utils'),
-  Defs = require('./defs');
+const { ResLoader, NewlineMode } = require('./resloader');
+const Defs = require('./defs'),
+  {Utils, Storage} = require('./utils');
 
 const ID = {
   search: 'input[type="search"]'
