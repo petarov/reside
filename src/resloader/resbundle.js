@@ -5,11 +5,12 @@ const fs = require('fs'),
   path = require('path'),
   readline = require('readline'),
   assert = require('assert');
+const jsesc = require('jsesc');
 
 const NewlineMode = {
-  LF: '\\n',
-  CRLF: '\\r\\n',
-  BR: '<br>'
+  LF: { ascii: '\n', utf8: '\\n' },
+  CRLF: { ascii: '\r\n', utf8: '\\r\\n' },
+  BR: { ascii: '<br>', utf8: '<br>' }
 };
 
 class ResBundle {
@@ -21,16 +22,34 @@ class ResBundle {
     this._strings = {};
   }
 
-  save(name, nlm) {
-    // TODO
-    //name = name || this._name;
-    const savePath = this._filepath.replace('.properties', '_01.properties.txt');
-    console.debug(`Saving ${savePath} ...`);
+  save(opts = { name: '', newlineMode: NewlineMode.LF, encoding: 'utf8' }) {
+    let savePath;
+    if (opts.name) {
+      if (!opts.name.endsWith('.properties')) {
+        savePath = opts.name + `_${this._locale}.properties`;
+      }
+    } else {
+      savePath = this._filepath;
+    }
+    console.debug(`Saving to ${savePath} ...`);
 
-    const stream = fs.createWriteStream(savePath);
+    let utf8 = false;
+    if ('utf8' === opts.encoding) {
+      utf8 = true;
+    } else {
+      opts.encoding ='latin1';
+    }
+
+    const stream = fs.createWriteStream(savePath, { encoding: opts.encoding });
     stream.once('open', function (fd) {
       for (const k in this._strings) {
-        const line = this._strings[k].replace(/\n/g, nlm);
+        let line;
+        if (utf8) {
+          line = this._strings[k].replace(/\n/g, opts.newlineMode.utf8);
+        } else {
+          line = this._strings[k].replace(/\n/g, opts.newlineMode.ascii);
+          line = jsesc(line, { 'json': true, 'wrap': false });
+        }
         stream.write(`${k}=${line}\n`);
       }
       stream.end();
@@ -65,10 +84,13 @@ class ResBundle {
         try {
           if (ucs2 || right.indexOf('\\u') > -1) {
             ucs2 = true;
-            this.strings[left] = JSON.parse(`"${right.replace(/\"/g, '\\"')}"`);
-          } else {
-            this.strings[left] = right;
+            right = JSON.parse(`"${right.replace(/\"/g, '\\"')}"`);
           }
+
+          // convert all known new line markers
+          right = right.replace(/(\\n)|(<br>)|(\\r\\n)/g, '\n');
+
+          this.strings[left] = right;
         } catch (e) {
           console.error(`Failed parsing line= ${line}`);
           // TODO: log error for given line

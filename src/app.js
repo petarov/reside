@@ -13,7 +13,9 @@ const Defs = require('./defs'),
   {Utils, Storage} = require('./utils');
 
 const ID = {
-  search: 'input[type="search"]'
+  search: 'input[type="search"]',
+  cfgEncoding: 'input[name="encoding"]',
+  cfgNewlines: 'input[name="newlines"]'
 };
 
 class ResideApp {
@@ -22,6 +24,8 @@ class ResideApp {
   }
 
   init() {
+    this.storage = new Storage(Defs.CONFIG_NAME);
+
     const app = new Framework7({
       root: '#app',
       name: 'Reside',
@@ -57,6 +61,16 @@ class ResideApp {
       ],
     });
 
+    $$(document).on('page:afterin', '.page[data-name="settings"]', function (e) {
+      // bring back what was saved
+      const saveEncoding = this.storage.settings('saveEncoding');
+      $$(`${ID.cfgEncoding}[value='${saveEncoding}']`).prop('checked', true);
+      const saveNewlines = this.storage.settings('saveNewlines');
+      $$(`${ID.cfgNewlines}[value='${saveNewlines}']`).prop('checked', true);
+
+      this.attachSettingsListeners();
+    }.bind(this));
+
     // bind templates
     this._templates = {
       labels: Template7.compile($$('script#tpl-labels').html()),
@@ -69,6 +83,15 @@ class ResideApp {
     this._searchTimeout = null;
     this.attachMenuListeners();
     this.editLabel(false);
+  }
+
+  attachSettingsListeners() {
+    $$(ID.cfgEncoding).on('click', (e) => {
+      this.storage.settings('saveEncoding', e.target.value);
+    });
+    $$(ID.cfgNewlines).on('click', (e) => {
+      this.storage.settings('saveNewlines', e.target.value);
+    });
   }
 
   attachMenuListeners() {
@@ -106,14 +129,22 @@ class ResideApp {
     });
 
     $$('.menu-save').on('click', (e) => {
-      // const dialog = this._app.dialog.confirm('Are you sure?', 'Quit App', () => {
-      //   ipcRenderer.sendSync('_quit');
-      // });
-      if (this._bundles) {
-        for (const bundle of this._bundles.values()) {
-          bundle.save('', NewlineMode.LF);
+      const dialog = this._app.dialog.confirm('Are you sure?', 'Save File', () => {
+        if (this._bundles) {
+          let newlineMode;
+          switch (this.storage.settings('saveNewlines')) {
+            case 'crlf': newlineMode = NewlineMode.CRLF; break;
+            case 'br': newlineMode = NewlineMode.BR; break;
+            default:
+            case 'lf': newlineMode = NewlineMode.LF; break;
+          }
+
+          const encoding = this.storage.settings('saveEncoding');
+          for (const bundle of this._bundles.values()) {
+            bundle.save({ newlineMode, encoding });
+          }
         }
-      }
+      });
     });
 
     $$('.menu-quit').on('click', (e) => {
