@@ -32,8 +32,8 @@ class Storage {
   constructor(filename, defaults = DEFAULTS) {
     const app = electron.remote.app || electron.app;
     const userDataPath = process.env['HOME'] || process.env['USERPROFILE'] || app.getPath('userData');
-    console.debug('Writing storage to ' + userDataPath);
     this.path = path.join(userDataPath, filename);
+    console.debug(`Using storage file ${this.path}`);
     this.data = loadStorage(this.path, defaults);
   }
 
