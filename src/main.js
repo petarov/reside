@@ -37,7 +37,7 @@ function createSplashWindow() {
   splashWindow.once('show', () => {
     setTimeout(() => {
       splashWindow.close();
-    }, 2800);
+    }, Defs.SPLASH_TIMEOUT);
   });
 
   splashWindow.once('closed', () => {
