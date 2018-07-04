@@ -1,35 +1,68 @@
 /**
  * main.js
  */
+"use strict";
 
 const {
-  app, 
+  app,
   Menu,
   BrowserWindow,
   ipcMain
 } = require('electron');
+const Defs = require('./defs');
 
-console.log(__dirname);
-require('electron-reload')(__dirname);
+// *** DEBUG ***
+const DEBUG_ENABLED = process.argv.indexOf('withdebug') > -1,
+  SPLASH_ENABLED = !(process.argv.indexOf('nosplash') > -1);
+
+if (DEBUG_ENABLED) {
+  require('electron-reload')(__dirname);
+}
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
 
-function createWindow () {
-  mainWindow = new BrowserWindow({
-    width: 1440, height: 900
+function createSplashWindow() {
+  let splashWindow = new BrowserWindow({
+    width: Defs.SPLASH_WINDOW_WIDTH,
+    height: Defs.SPLASH_WINDOW_HEIGHT,
+    frame: false,
+    show: false
   });
 
-  // and load the index.html of the app.
-  //mainWindow.loadFile('index.html');
+  splashWindow.loadURL(`file://${__dirname}/splash.html`);
+
+  splashWindow.once('show', () => {
+    setTimeout(() => {
+      splashWindow.close();
+    }, 2800);
+  });
+
+  splashWindow.once('closed', () => {
+    splashWindow = null;
+    createAppWindow();
+  });
+
+  splashWindow.once('ready-to-show', () => {
+    splashWindow.show()
+  })
+}
+
+function createAppWindow() {
+  mainWindow = new BrowserWindow({
+    width: Defs.APP_WINDOW_WIDTH,
+    height: Defs.APP_WINDOW_HEIGHT
+  });
+
   mainWindow.loadURL(`file://${__dirname}/index.html`);
 
-  // debug
-  mainWindow.webContents.openDevTools()
+  if (DEBUG_ENABLED) {
+    mainWindow.webContents.openDevTools()
+  }
 
   // Emitted when the window is closed.
-  mainWindow.on('closed', function () {
+  mainWindow.once('closed', function () {
     // Dereference the window object, usually you would store windows
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
@@ -39,7 +72,7 @@ function createWindow () {
   createMenu();
 }
 
-function createMenu () {
+function createMenu() {
   const mainMenu = require('./menu.js');
   Menu.setApplicationMenu(mainMenu.createMainMenu());
 }
@@ -47,10 +80,10 @@ function createMenu () {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', createWindow);
+app.once('ready', SPLASH_ENABLED ? createSplashWindow : createAppWindow);
 
 // Quit when all windows are closed.
-app.on('window-all-closed', function () {
+app.once('window-all-closed', function () {
   // On OS X it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
   if (process.platform !== 'darwin') {
@@ -58,18 +91,15 @@ app.on('window-all-closed', function () {
   }
 });
 
-app.on('activate', function () {
+app.once('activate', function () {
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (mainWindow === null) {
-    createWindow();
+    createAppWindow();
   }
 });
 
-ipcMain.on('_quit', (event, arg) => {
+ipcMain.once('_quit', (event, arg) => {
   console.log('quit signal received');
   app.quit();
 })
-
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.

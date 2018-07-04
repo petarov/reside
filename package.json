@@ -4,7 +4,8 @@
   "description": "Reside is a minimalistic Java ResourceBundle files editor.",
   "main": "./src/main.js",
   "scripts": {
-    "start": "electron-forge start",
+    "start": "electron-forge start -- withdebug nosplash",
+    "demo": "electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
     "test": "mocha"
