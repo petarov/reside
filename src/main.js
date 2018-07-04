@@ -9,6 +9,7 @@ const {
   BrowserWindow,
   ipcMain
 } = require('electron');
+const path = require('path');
 const Defs = require('./defs');
 
 // *** DEBUG ***
@@ -52,7 +53,8 @@ function createSplashWindow() {
 function createAppWindow() {
   mainWindow = new BrowserWindow({
     width: Defs.APP_WINDOW_WIDTH,
-    height: Defs.APP_WINDOW_HEIGHT
+    height: Defs.APP_WINDOW_HEIGHT,
+    icon: path.join(__dirname, 'assets/icons/png/cat-vampire-icon-64x64.png')
   });
 
   mainWindow.loadURL(`file://${__dirname}/index.html`);

@@ -53,7 +53,8 @@
         ]
       },
       "electronPackagerConfig": {
-        "packageManager": "yarn"
+        "packageManager": "yarn",
+        "icon": "src/assets/icons/cat-vampire-icon"
       },
       "electronWinstallerConfig": {
         "name": "reside"
