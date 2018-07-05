@@ -11,3 +11,7 @@ textarea.text-edit {
   min-height: 55px !important;
   resize: vertical !important;
 }
+
+.my-searchbar-not-found {
+  display: none;
+}

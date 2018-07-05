@@ -16,15 +16,13 @@ const Defs = require('./defs'),
   {Utils, Storage} = require('./utils');
 
 const ID = {
+  searchForm: 'form.searchbar',
   search: 'input[type="search"]',
   cfgEncoding: 'input[name="encoding"]',
   cfgNewlines: 'input[name="newlines"]'
 };
 
 class ResideApp {
-
-  constructor() {
-  }
 
   init() {
     this.storage = new Storage(Defs.CONFIG_NAME);
@@ -81,11 +79,38 @@ class ResideApp {
       translationsActions: Template7.compile($$('script#tpl-translations-actions').html())
     };
 
+    // bind search bar
+    this._searchBar = app.searchbar.create({
+      el: '.searchbar',
+      inputEl: ID.search,
+      disableButton: false,
+      // searchContainer: '.virtual-list',
+      // searchItem: 'div',
+      // searchIn: '.item-title',
+      customSearch: true,
+      on: {
+        search: (sb, q, pq) => {
+          console.log(q);
+          if (!this._searchTimeout) {
+            this._searchTimeout = setTimeout(() => {
+              // cancel timer
+              clearTimeout(this._searchTimeout);
+              this._searchTimeout = null;
+              // apply filter
+              this.filterLabels(this._searchBar.query);
+            }, Defs.SEARCH_TIMEOUT);
+          }
+        }
+      }
+    });
+    this._searchBar.disable();
+    this._searchTimeout = null;
+
     ResideApp.cssVisible(false, '#add-label', '#title-labels', '.searchbar');
 
     this._bundles = null;
     this._app = app;
-    this._searchTimeout = null;
+    this.virtualList = null;
     this.attachMenuListeners();
     this.editLabel(false);
   }
@@ -166,19 +191,7 @@ class ResideApp {
       this.editLabel(text);
     });
 
-    $$(ID.search).on('keyup', (e) => {
-      if (!e.shiftKey && !e.ctrlKey && !e.altKey) {
-        if (!this._searchTimeout) {
-          this._searchTimeout = setTimeout(() => {
-            // cancel timer
-            clearTimeout(this._searchTimeout);
-            this._searchTimeout = null;
-            // apply filter
-            this.filterLabels($$(ID.search).val());
-          }, Defs.SEARCH_TIMEOUT);
-        }
-      }
-    });
+    this._searchBar.enable();
   }
 
   attachEditListeners() {
@@ -219,12 +232,18 @@ class ResideApp {
       $$(ID.search).val('');
     }
 
-    this._app.virtualList.destroy('#nav-labels');
-    this._app.virtualList.create({
-      el: '#nav-labels',
-      items: labels,
-      itemTemplate: this._templates.labels,
-    });
+    if (this.virtualList) {
+      this.virtualList.replaceAllItems(labels);
+    } else {
+      // this._app.virtualList.destroy('#nav-labels');
+      this.virtualList = this._app.virtualList.create({
+        el: '#nav-labels',
+        items: labels,
+        itemTemplate: this._templates.labels,
+      });
+    }
+
+    ResideApp.cssHidden(labels.length === 0, '.my-searchbar-not-found');
 
     this.attachLabelListeners();
   }
@@ -391,6 +410,12 @@ class ResideApp {
   static cssVisible(visible, ...ids) {
     for (const id of ids) {
       $$(id).css('visibility', visible ? 'visible' : 'hidden');
+    }
+  }
+
+  static cssHidden(hidden, ...ids) {
+    for (const id of ids) {
+      $$(id).css('display', hidden ? 'block' : 'none');
     }
   }
 }
