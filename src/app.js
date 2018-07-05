@@ -81,7 +81,7 @@ class ResideApp {
       translationsActions: Template7.compile($$('script#tpl-translations-actions').html())
     };
 
-    ResideApp.cssVisible('#add-label', false);
+    ResideApp.cssVisible(false, '#add-label', '#title-labels', '.searchbar');
 
     this._bundles = null;
     this._app = app;
@@ -110,6 +110,10 @@ class ResideApp {
     /**
      * Menus
      */
+    $$('.menu-new').on('click', (e) => {
+      // TODO
+    });
+
     $$('.menu-open').on('click', (e) => {
       const openFileFn = function() {
         dialog.showOpenDialog({
@@ -241,14 +245,14 @@ class ResideApp {
       $$('#edit-translations-actions').html(
         this._templates.translationsActions({label}));
 
-      ResideApp.cssVisible('#edit-translations-actions', true);
-      // ResideApp.cssVisible('#add-label', true);
+      ResideApp.cssVisible(true, '#edit-translations-actions');
+      // ResideApp.cssVisible(true, '#add-label');
 
       this.attachEditListeners();
     } else {
       $$('#edit-translations').html('');
-      ResideApp.cssVisible('#edit-translations-actions', false);
-      // ResideApp.cssVisible('#add-label', false);
+      ResideApp.cssVisible(false, '#edit-translations-actions');
+      // ResideApp.cssVisible(false, '#add-label');
     }
   }
 
@@ -320,9 +324,10 @@ class ResideApp {
       if (bundles.size > 0) {
         this._labels = Object.keys(index).map((key) => key);
         this._bundles = bundles;
+        this.editLabel(false);
         this.filterLabels(false);
-        // allow adding new labels
-        ResideApp.cssVisible('#add-label', true);
+        // allow search and adding new labels
+        ResideApp.cssVisible(true, '#add-label', '#title-labels', '.searchbar');
         // notify user
         $$('#nav-title').text(name);
         this._app.toast.create({
@@ -330,16 +335,16 @@ class ResideApp {
           closeTimeout: Defs.TOAST_NORMAL,
         }).open();
       } else {
-        // disallow adding new labels
-        ResideApp.cssVisible('#add-label', false);
+        // disallow search and adding new labels
+        ResideApp.cssVisible(false, '#add-label', '#title-labels', '.searchbar');
         // notify user
         this._app.dialog.alert('No strings found in file!', 'Invalid bundle file');
       }
     }).catch((e) => {
       this._app.dialog.close(); // close progress
       console.error('Failed loading file!', e);
-      // disallow adding new labels
-      ResideApp.cssVisible('#add-label', false);
+      // disallow search and adding new labels
+      ResideApp.cssVisible(false, '#add-label', '#title-labels', '.searchbar');
       // notify user
       this._app.dialog.alert('Failed loading file!');
     });
@@ -382,8 +387,10 @@ class ResideApp {
     }
   }
 
-  static cssVisible(id, visible) {
-    $$(id).css('visibility', visible ? 'visible' : 'hidden');
+  static cssVisible(visible, ...ids) {
+    for (const id of ids) {
+      $$(id).css('visibility', visible ? 'visible' : 'hidden');
+    }
   }
 }
 
