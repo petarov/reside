@@ -160,8 +160,9 @@ class ResideApp {
   }
 
   attachLabelListeners() {
-    $$('.label').on('click', (e) => {
-      const text = $$(e.target).text() || $$(e.target).find('.item-title').text();
+    $$('.virtual-list').on('click', 'a.label', (e) => {
+      const target = $$(e.target);
+      const text = target.text() || target.find('.item-title').text();
       this.editLabel(text);
     });
 
