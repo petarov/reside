@@ -33,7 +33,7 @@
     "electron-compile": "^6.4.3",
     "electron-reload": "^1.2.5",
     "electron-squirrel-startup": "^1.0.0",
-    "framework7": "^3.0.0-beta.15",
+    "framework7": "^3.0.0",
     "jsesc": "^2.5.1",
     "material-icons": "^0.2.3",
     "sanitize-filename": "^1.6.1",
