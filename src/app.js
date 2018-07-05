@@ -4,8 +4,11 @@
 const { ipcRenderer } = require('electron');
 const { dialog } = require('electron').remote;
 
-const Framework7 = require('framework7');
-const Template7 = require('template7');
+// const util = require('util');
+// const setTimeoutPromise = util.promisify(setTimeout);
+
+const Framework7 = require('framework7'),
+  Template7 = require('template7');
 const $$ = Dom7;
 
 const { ResLoader, NewlineMode } = require('./resloader');
@@ -78,6 +81,8 @@ class ResideApp {
       translationsActions: Template7.compile($$('script#tpl-translations-actions').html())
     };
 
+    ResideApp.cssVisible('#add-label', false);
+
     this._bundles = null;
     this._app = app;
     this._searchTimeout = null;
@@ -106,13 +111,24 @@ class ResideApp {
      * Menus
      */
     $$('.menu-open').on('click', (e) => {
-      dialog.showOpenDialog({
-        title: 'Select a bundle file',
-        properties: ['openFile'],
-        filters: Defs.SUPPORTED_EXTENSIONS,
-      }, (filePaths) => {
-        this.openBundles(filePaths[0]);
-      });
+      const openFileFn = function() {
+        dialog.showOpenDialog({
+          title: 'Select a bundle file',
+          properties: ['openFile'],
+          filters: Defs.SUPPORTED_EXTENSIONS,
+        }, (filePaths) => {
+          this.openBundles(filePaths[0]);
+        });
+      }.bind(this);
+
+      if (this._bundles) {
+        this._app.dialog.confirm('Are your sure? Unsaved changes will be lost.', 
+        'Open File', (value) => {
+          openFileFn();
+        });
+      } else {
+        openFileFn();
+      }
     });
 
     $$('.menu-save').on('click', (e) => {
@@ -125,15 +141,17 @@ class ResideApp {
         this._app.dialog.prompt('Enter a bundle name', 'Save File As', (value) => {
           if (value) {
             this.saveBundles(value);
+          } else {
+            // notify user
+            this._app.dialog.alert('Name not specified!');
           }
         });
       }
     });
 
     $$('.menu-quit').on('click', (e) => {
-      const dialog = this._app.dialog.confirm('Are you sure?', 'Quit App', () => {
-        ipcRenderer.sendSync('_quit');
-      });
+      this._app.dialog.confirm('Are you sure?', 'Quit App', 
+        () => ipcRenderer.sendSync('_quit'));
     });
   }
 
@@ -224,13 +242,13 @@ class ResideApp {
         this._templates.translationsActions({label}));
 
       ResideApp.cssVisible('#edit-translations-actions', true);
-      ResideApp.cssVisible('#add-label', true);
+      // ResideApp.cssVisible('#add-label', true);
 
       this.attachEditListeners();
     } else {
       $$('#edit-translations').html('');
       ResideApp.cssVisible('#edit-translations-actions', false);
-      ResideApp.cssVisible('#add-label', false);
+      // ResideApp.cssVisible('#add-label', false);
     }
   }
 
@@ -246,9 +264,11 @@ class ResideApp {
     }).open();
     // update index
     this._labels.push(label);
-    //this.filterLabels(false);
+    this.filterLabels(false);
     // edit new element
-    this.editLabel(label);
+    setTimeout(() => {
+      this.editLabel(label);
+    }, 250);
   }
 
   deleteLabel(label) {
@@ -301,6 +321,8 @@ class ResideApp {
         this._labels = Object.keys(index).map((key) => key);
         this._bundles = bundles;
         this.filterLabels(false);
+        // allow adding new labels
+        ResideApp.cssVisible('#add-label', true);
         // notify user
         $$('#nav-title').text(name);
         this._app.toast.create({
@@ -308,12 +330,16 @@ class ResideApp {
           closeTimeout: Defs.TOAST_NORMAL,
         }).open();
       } else {
+        // disallow adding new labels
+        ResideApp.cssVisible('#add-label', false);
         // notify user
         this._app.dialog.alert('No strings found in file!', 'Invalid bundle file');
       }
     }).catch((e) => {
       this._app.dialog.close(); // close progress
       console.error('Failed loading file!', e);
+      // disallow adding new labels
+      ResideApp.cssVisible('#add-label', false);
       // notify user
       this._app.dialog.alert('Failed loading file!');
     });
@@ -329,7 +355,9 @@ class ResideApp {
         case 'lf': newlineMode = NewlineMode.LF; break;
       }
 
+      const savedNames = [];
       const encoding = this.storage.settings('saveEncoding');
+
       for (const bundle of this._bundles.values()) {
         if (bundleName) {
           const { newName } = bundle.rename(bundleName);
@@ -339,7 +367,18 @@ class ResideApp {
         } else {
           bundle.save({ newlineMode, encoding });
         }
+
+        savedNames.push(bundle.name);
       }
+
+      // notify user
+      this._app.toast.create({
+        text: `Saved ${savedNames} files.`,
+        closeTimeout: Defs.TOAST_NORMAL,
+      }).open();
+    } else {
+      // notify user
+      this._app.dialog.alert('Nothing to save!');
     }
   }
 
