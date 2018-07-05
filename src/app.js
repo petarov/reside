@@ -295,10 +295,10 @@ class ResideApp {
     new ResLoader().path(dirname).name(name).load().then((result) => {
       this._app.dialog.close(); // close progress
 
-      const { bundles, strings } = result;
+      const { bundles, index } = result;
 
       if (bundles.size > 0) {
-        this._labels = Object.keys(strings).map((key) => key);
+        this._labels = Object.keys(index).map((key) => key);
         this._bundles = bundles;
         this.filterLabels(false);
         // notify user
@@ -331,7 +331,14 @@ class ResideApp {
 
       const encoding = this.storage.settings('saveEncoding');
       for (const bundle of this._bundles.values()) {
-        bundle.save({ bundleName, newlineMode, encoding });
+        if (bundleName) {
+          const { newName } = bundle.rename(bundleName);
+          bundle.save({ newlineMode, encoding });
+          // notify user
+          $$('#nav-title').text(newName);
+        } else {
+          bundle.save({ newlineMode, encoding });
+        }
       }
     }
   }

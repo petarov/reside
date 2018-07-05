@@ -5,7 +5,9 @@ const fs = require('fs'),
   path = require('path'),
   readline = require('readline'),
   assert = require('assert');
-const jsesc = require('jsesc');
+const jsesc = require('jsesc'),
+  sanitize = require("sanitize-filename");
+const { Utils } = require('../utils');
 
 const NewlineMode = {
   LF: { ascii: '\n', utf8: '\\n' },
@@ -22,19 +24,8 @@ class ResBundle {
     this._strings = {};
   }
 
-  save(opts = { bundleName: '', newlineMode: NewlineMode.LF, encoding: 'utf8' }) {
-    let savePath;
-    if (opts.bundleName) {
-      if (!opts.bundleName.endsWith('.properties')) {
-        opts.bundleName = opts.bundleName + `_${this._locale}.properties`;
-      } else {
-        opts.bundleName = opts.bundleName.replace('.properties', `_${this._locale}.properties`)
-      }
-      savePath = path.join(path.dirname(this._filepath), opts.bundleName);
-    } else {
-      savePath = this._filepath;
-    }
-    console.debug(`Saving bundle to ${savePath} ...`);
+  save(opts = { newlineMode: NewlineMode.LF, encoding: 'utf8' }) {
+    console.debug(`Saving bundle to ${this._filepath} ...`);
 
     let utf8 = false;
     if ('utf8' === opts.encoding) {
@@ -43,7 +34,7 @@ class ResBundle {
       opts.encoding ='latin1';
     }
 
-    const stream = fs.createWriteStream(savePath, { encoding: opts.encoding });
+    const stream = fs.createWriteStream(this._filepath, { encoding: opts.encoding });
     stream.once('open', function (fd) {
       for (const k in this._strings) {
         let line;
@@ -59,8 +50,33 @@ class ResBundle {
     }.bind(this));
   }
 
-  reload(strings) {
-    strings = strings || {};
+  rename(newName, newPath) {
+    assert(!!newName);
+
+    newName = sanitize(newName);
+
+    let filename;
+    if (!newName.endsWith('.properties')) {
+      filename = newName + `_${this._locale}.properties`;
+    } else {
+      filename = newName.replace('.properties', `_${this._locale}.properties`)
+    }
+
+    let saveFilePath;
+
+    if (newPath) {
+      saveFilePath = path.join(newPath, filename);
+    } else {
+      saveFilePath = path.join(path.dirname(this._filepath), filename);
+    }
+
+    this._name = filename;
+    this._filepath = saveFilePath;
+
+    return { newName, saveFilePath };
+  }
+
+  reload(index) {
     return new Promise((resolve, reject) => {
       console.debug(`Loading ${this._filepath} ...`);
 
@@ -75,7 +91,7 @@ class ResBundle {
         //console.log('Line: ', line);
         
         // Comments starting with # // ;
-        if (line.startsWith('#') || line.startsWith('/') || line.startsWith(';')) {
+        if (Utils.isComment(line)) {
           console.debug(`Skipped comment line= ${line}`);
           return;
         }
@@ -100,13 +116,19 @@ class ResBundle {
           this.strings[left] = right;
         }
 
-        strings[left] = null;
+        if (index) {
+          index[left] = null;
+        }
       });
 
       lineReader.on('close', () => {
         resolve(this);
       });
     });
+  }
+
+  get filepath() {
+    return this._filepath;
   }
 
   get name() {
