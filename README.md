@@ -1,8 +1,10 @@
 # Reside
 
-![Reside Logo](src/assets/icons/png/cat-vampire-icon-128x128.png)
+![Reside Logo](src/assets/icons/png/cat-vampire-icon-96x96.png)
 
 A minimalistic Java [ResourceBundle](https://docs.oracle.com/javase/7/docs/api/java/util/ResourceBundle.html) files GUI editor.
+
+![Residé Screenshot](https://i.imgur.com/pPOmdWl.png)
 
 # Development
 
