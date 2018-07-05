@@ -19,4 +19,16 @@ describe('utils', () => {
     });
   });
 
+  describe('#isComment()', () => {
+    it('is label a comment', () => {
+      assert.ok(Utils.isComment(''));
+      assert.ok(Utils.isComment('#Comment!'));
+      assert.ok(Utils.isComment('##Comment!'));
+      assert.ok(Utils.isComment(';!'));
+      assert.ok(Utils.isComment(';;;;;Comment'));
+      assert.ok(Utils.isComment('//Comment!'));
+      assert.ok(Utils.isComment('/Comment!'));
+    });
+  });
+
 });
