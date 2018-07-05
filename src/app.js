@@ -2,7 +2,7 @@
 "use strict";
 
 const { ipcRenderer } = require('electron');
-const { dialog } = require('electron').remote;
+const { app, dialog } = require('electron').remote;
 
 // const util = require('util');
 // const setTimeoutPromise = util.promisify(setTimeout);
@@ -27,7 +27,7 @@ class ResideApp {
   init() {
     this.storage = new Storage(Defs.CONFIG_NAME);
 
-    const app = new Framework7({
+    const f7App = new Framework7({
       root: '#app',
       name: 'Reside',
       id: 'net.vexelon.reside.desktop',
@@ -40,13 +40,13 @@ class ResideApp {
     });
 
     // left panel view
-    this.leftView = app.views.create('.view-left', {
+    this.leftView = f7App.views.create('.view-left', {
       el: '.view-left'
     });
 
     // main view
     // @see: http://forum.framework7.io/t/how-compose-views-and-pages-right/2937/2
-    this.mainView = app.views.create('.view-main', {
+    this.mainView = f7App.views.create('.view-main', {
       el: '.view-main',
       pageName: 'settings',
       //stackPages: true,
@@ -80,7 +80,7 @@ class ResideApp {
     };
 
     // bind search bar
-    this._searchBar = app.searchbar.create({
+    this._searchBar = f7App.searchbar.create({
       el: '.searchbar',
       inputEl: ID.search,
       disableButton: false,
@@ -107,9 +107,10 @@ class ResideApp {
     this._searchTimeout = null;
 
     ResideApp.cssVisible(false, '#add-label', '#title-labels', '.searchbar');
+    $$('.app-version').text(`v${app.getVersion()}`);
 
     this._bundles = null;
-    this._app = app;
+    this._app = f7App;
     this.virtualList = null;
     this.attachMenuListeners();
     this.editLabel(false);

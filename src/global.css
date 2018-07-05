@@ -15,3 +15,15 @@ textarea.text-edit {
 .my-searchbar-not-found {
   display: none;
 }
+
+.app-avatar {
+  width: 55px;
+  height: 62px;
+}
+
+.app-version {
+  font-size: 60%;
+  text-align: left;
+  padding-top: 0;
+  padding-left: 5px;
+}
