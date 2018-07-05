@@ -111,35 +111,7 @@ class ResideApp {
         properties: ['openFile'],
         filters: Defs.SUPPORTED_EXTENSIONS,
       }, (filePaths) => {
-        const {dirname, name} = Utils.getBundleName(filePaths[0]);
-        
-        this._app.dialog.progress(); // open progress
-
-        new ResLoader().path(dirname).name(name).load().then((result) => {
-          this._app.dialog.close(); // close progress
-
-          const { bundles, strings } = result;
-
-          if (bundles.size > 0) {
-            this._labels = Object.keys(strings).map((key) => key);
-            this._bundles = bundles;
-            this.filterLabels(false);
-            // notify user
-            $$('#nav-title').text(name);
-            this._app.toast.create({
-              text: `Loaded ${bundles.size} file(s) for ${name}.`, 
-              closeTimeout: Defs.TOAST_NORMAL,
-            }).open();
-          } else {
-            // notify user
-            this._app.dialog.alert('No strings found in file!', 'Invalid bundle file');
-          }
-        }).catch((e) => {
-          this._app.dialog.close(); // close progress
-          console.error('Failed loading file!', e);
-          // notify user
-          this._app.dialog.alert('Failed loading file!');
-        });
+        this.openBundles(filePaths[0]);
       });
     });
 
@@ -194,44 +166,23 @@ class ResideApp {
       bundle.set(label, e.target.value);
     }.bind(this));
 
-    $$('.action-clone').on('click', (e) => {
-      const label = $$(e.target).data('label');
-      const newLabel = label + '_COPY';
-      // add to all bundles
-      for (const bundle of this._bundles.values()) {
-        bundle.set(newLabel, '');
-      }
-      // notify user
-      this._app.toast.create({
-        text: `Cloned ${label} to ${newLabel}.`,
-        closeTimeout: Defs.TOAST_NORMAL,
-      }).open();
-      // update index
-      this._labels.splice(
-        this._labels.findIndex((v) => v === label), 0, newLabel);
-      this.filterLabels(false);
-      // edit new element
-      this.editLabel(newLabel);
-    });
+    $$('.action-clone').on('click', 
+      (e) => this.cloneLabel($$(e.target).data('label')));
 
     $$('.action-delete').on('click', (e) => {
       const label = $$(e.target).data('label');
-      const dialog = this._app.dialog.confirm(`Delete ${label}?`, 
-      `Delete translation`, () => {
-        // hide edit translation pane
-        this.editLabel(false);
-        // remove from all bundles
-        for (const bundle of this._bundles.values()) {
-          bundle.remove(label);
+      const dialog = this._app.dialog.confirm(`Delete ${label} and translations?`, 
+        `Delete Label`, () => this.deleteLabel(label));
+    });
+
+    $$('#add-label').on('click', (e) => {
+      this._app.dialog.prompt('Enter a label name', 'Add Label', (label) => {
+        if (label && !Utils.isComment(label)) {
+          this.addLabel(label.trim());
+        } else {
+          // notify user
+          this._app.dialog.alert('Invalid or empty label name!');
         }
-        // notify user
-        this._app.toast.create({
-          text: `Removed ${label} translation.`,
-          closeTimeout: Defs.TOAST_NORMAL,
-        }).open();
-        // update index
-        this._labels.splice(this._labels.findIndex((v) => v === label), 1);
-        this.filterLabels(false);
       });
     });
   }
@@ -273,12 +224,99 @@ class ResideApp {
         this._templates.translationsActions({label}));
 
       ResideApp.cssVisible('#edit-translations-actions', true);
+      ResideApp.cssVisible('#add-label', true);
 
       this.attachEditListeners();
     } else {
       $$('#edit-translations').html('');
       ResideApp.cssVisible('#edit-translations-actions', false);
+      ResideApp.cssVisible('#add-label', false);
     }
+  }
+
+  addLabel(label) {
+    // add to all bundles
+    for (const bundle of this._bundles.values()) {
+      bundle.set(label, '');
+    }
+    // notify user
+    this._app.toast.create({
+      text: `Added new ${label} label.`,
+      closeTimeout: Defs.TOAST_NORMAL,
+    }).open();
+    // update index
+    this._labels.push(label);
+    //this.filterLabels(false);
+    // edit new element
+    this.editLabel(label);
+  }
+
+  deleteLabel(label) {
+    // hide edit translation pane
+    this.editLabel(false);
+    // remove from all bundles
+    for (const bundle of this._bundles.values()) {
+      bundle.remove(label);
+    }
+    // notify user
+    this._app.toast.create({
+      text: `Removed ${label} label.`,
+      closeTimeout: Defs.TOAST_NORMAL,
+    }).open();
+    // update index
+    this._labels.splice(this._labels.findIndex((v) => v === label), 1);
+    this.filterLabels(false);
+  }
+
+  cloneLabel(label) {
+    const newLabel = label + '_COPY';
+    // add to all bundles
+    for (const bundle of this._bundles.values()) {
+      bundle.set(newLabel, '');
+    }
+    // notify user
+    this._app.toast.create({
+      text: `Cloned ${label} to ${newLabel} label.`,
+      closeTimeout: Defs.TOAST_NORMAL,
+    }).open();
+    // update index
+    this._labels.splice(
+      this._labels.findIndex((v) => v === label), 0, newLabel);
+    this.filterLabels(false);
+    // edit new element
+    this.editLabel(newLabel);
+  }
+
+  openBundles(bundleFilePath) {
+    const { dirname, name } = Utils.getBundleName(bundleFilePath);
+
+    this._app.dialog.progress(); // open progress
+
+    new ResLoader().path(dirname).name(name).load().then((result) => {
+      this._app.dialog.close(); // close progress
+
+      const { bundles, strings } = result;
+
+      if (bundles.size > 0) {
+        this._labels = Object.keys(strings).map((key) => key);
+        this._bundles = bundles;
+        this.filterLabels(false);
+        // notify user
+        $$('#nav-title').text(name);
+        this._app.toast.create({
+          text: `Loaded ${bundles.size} file(s) for ${name}.`,
+          closeTimeout: Defs.TOAST_NORMAL,
+        }).open();
+      } else {
+        // notify user
+        this._app.dialog.alert('No strings found in file!', 'Invalid bundle file');
+      }
+    }).catch((e) => {
+      this._app.dialog.close(); // close progress
+      console.error('Failed loading file!', e);
+      // notify user
+      this._app.dialog.alert('Failed loading file!');
+    });
   }
 
   saveBundles(bundleName) {
