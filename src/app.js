@@ -79,6 +79,7 @@ class ResideApp {
     // bind templates
     this._templates = {
       labels: Template7.compile($$('script#tpl-labels').html()),
+      locales: Template7.compile($$('script#tpl-locales-chips').html()),
       translations: Template7.compile($$('script#tpl-translations').html()),
       translationsActions: Template7.compile($$('script#tpl-translations-actions').html())
     };
@@ -109,8 +110,7 @@ class ResideApp {
     this._searchBar.disable();
     this._searchTimeout = null;
 
-    ResideApp.cssVisible(false, '#add-label', '#title-labels', '.searchbar', 
-      '.label-options', '.chip-labels');
+    this.displayLabels(false);
     $$('.app-version').text(`v${app.getVersion()}`);
 
     this._bundles = null;
@@ -118,6 +118,11 @@ class ResideApp {
     this.virtualList = null;
     this.attachMenuListeners();
     this.editLabel(false);
+  }
+
+  displayLabels(visible) {
+    ResideApp.cssVisible(visible, '#add-label', '#title-labels', '.searchbar', 
+      '.label-options', '.chip-labels', '.chip-locales');
   }
 
   attachSettingsListeners() {
@@ -448,8 +453,13 @@ class ResideApp {
         this.editLabel(false);
         this.filterLabels(false);
         // allow search and adding new labels
-        ResideApp.cssVisible(true, '#add-label', '#title-labels', '.searchbar', 
-          '.label-options', '.chip-labels');
+        this.displayLabels(true);
+        const obj = { locales: [] };
+        for (const bundle of this._bundles.values()) {
+          obj.locales.push(bundle.locale);
+        }
+        const html = this._templates.locales(obj);
+        $$('#chip-locales').html(html);
         // notify user
         $$('#nav-title').text(name);
         this._app.toast.create({
@@ -458,8 +468,7 @@ class ResideApp {
         }).open();
       } else {
         // disallow search and adding new labels
-        ResideApp.cssVisible(false, '#add-label', '#title-labels', '.searchbar', 
-          '.label-options', '.chip-labels');
+        this.displayLabels(false);
         // notify user
         this._app.dialog.alert('No strings found in file!', 'Invalid bundle file');
       }
@@ -467,8 +476,7 @@ class ResideApp {
       this._app.dialog.close(); // close progress
       console.error('Failed loading file!', e);
       // disallow search and adding new labels
-      ResideApp.cssVisible(false, '#add-label', '#title-labels', '.searchbar', 
-        '.label-options', '.chip-labels');
+      this.displayLabels(false);
       // notify user
       this._app.dialog.alert('Failed loading file!');
     });

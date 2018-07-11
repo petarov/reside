@@ -53,10 +53,13 @@
                 <button class="col button menu-search">Search</button>
                 <button class="col button menu-filter">Filter</button>
               </p>
-              <p class="row">
+              <p  class="row chip-locales">
                 <div class="chip chip-labels">
                   <div class="chip-label chip-num-translations"></div>
                 </div>
+                <span id="chip-locales">
+                  <!-- tpl-locales-chips -->
+                </span>
               </p>
             </div>
             <!-- <div id="title-labels" class="block-title">Labels</div> -->
@@ -72,6 +75,14 @@
         </div>
       </div>
     </div>
+
+    <script id="tpl-locales-chips" type="text/template7">
+      {{#each locales}}
+      <div class="chip chip-outline color-blue chip-locales">
+        <div class="chip-label">{{this}}</div>
+      </div>
+      {{/each}}
+    </script>
 
     <script id="tpl-labels" type="text/template7">
       <li>
