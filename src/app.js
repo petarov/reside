@@ -236,9 +236,9 @@ class ResideApp {
               this.storage.filter('labels', e.target.value);
               showToast();
             });
-          }
-        },
-        close: () => this.filterLabels(this._searchBar.query)
+          },
+          close: () => this.filterLabels(this._searchBar.query)
+        }
       }).open();
     });
 
@@ -284,7 +284,9 @@ class ResideApp {
   }
 
   filterLabels(expr) {
-    let labels = this._labels;
+    let labels;
+
+    const isAllLabels = 'all' === this.storage.filter('labels');
 
     if (expr) {
       let searchFn;
@@ -314,6 +316,20 @@ class ResideApp {
 
     } else {
       $$(ID.search).val('');
+
+      if (isAllLabels) {
+        labels = this._labels;
+      } else {
+        labels = this._labels.filter((v) => {
+          for (const bundle of this._bundles.values()) {
+            const translation = bundle.get(v);
+            if (!translation || !translation.trim()) {
+              return true;
+            }
+          }
+          return false;
+        });
+      }
     }
 
     if (this.virtualList) {
