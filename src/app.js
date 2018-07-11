@@ -16,6 +16,7 @@ const Defs = require('./defs'),
   {Utils, Storage} = require('./utils');
 
 const ID = {
+  labelsCount: '.chip-num-translations',
   searchForm: 'form.searchbar',
   search: 'input[type="search"]',
   cfgEncoding: 'input[name="encoding"]',
@@ -109,8 +110,8 @@ class ResideApp {
     this._searchBar.disable();
     this._searchTimeout = null;
 
-    ResideApp.cssVisible(false, 
-      '#add-label', '#title-labels', '.searchbar', '.label-options');
+    ResideApp.cssVisible(false, '#add-label', '#title-labels', '.searchbar', 
+      '.label-options', '.chip-labels');
     $$('.app-version').text(`v${app.getVersion()}`);
 
     this._bundles = null;
@@ -343,6 +344,7 @@ class ResideApp {
       });
     }
 
+    $$(ID.labelsCount).text(labels.length);
     ResideApp.cssHidden(labels.length === 0, '.my-searchbar-not-found');
 
     this.attachLabelListeners();
@@ -447,8 +449,8 @@ class ResideApp {
         this.editLabel(false);
         this.filterLabels(false);
         // allow search and adding new labels
-        ResideApp.cssVisible(true, 
-          '#add-label', '#title-labels', '.searchbar', '.label-options');
+        ResideApp.cssVisible(true, '#add-label', '#title-labels', '.searchbar', 
+          '.label-options', '.chip-labels');
         // notify user
         $$('#nav-title').text(name);
         this._app.toast.create({
@@ -457,8 +459,8 @@ class ResideApp {
         }).open();
       } else {
         // disallow search and adding new labels
-        ResideApp.cssVisible(false, 
-          '#add-label', '#title-labels', '.searchbar', '.label-options');
+        ResideApp.cssVisible(false, '#add-label', '#title-labels', '.searchbar', 
+          '.label-options', '.chip-labels');
         // notify user
         this._app.dialog.alert('No strings found in file!', 'Invalid bundle file');
       }
@@ -466,8 +468,8 @@ class ResideApp {
       this._app.dialog.close(); // close progress
       console.error('Failed loading file!', e);
       // disallow search and adding new labels
-      ResideApp.cssVisible(false, 
-        '#add-label', '#title-labels', '.searchbar', '.label-options');
+      ResideApp.cssVisible(false, '#add-label', '#title-labels', '.searchbar', 
+        '.label-options', '.chip-labels');
       // notify user
       this._app.dialog.alert('Failed loading file!');
     });

@@ -27,3 +27,11 @@ textarea.text-edit {
   padding-top: 0;
   padding-left: 5px;
 }
+
+.virtual-list {
+  margin-top: 2px !important;
+}
+
+.block-options {
+  margin-bottom: 0px !important;
+}
