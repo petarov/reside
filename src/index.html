@@ -48,7 +48,13 @@
           </div>
 
           <div class="page-content">
-            <div id="title-labels" class="block-title">Labels</div>
+            <div class="block">
+              <p class="segmented segmented-raised label-options">
+                <button class="col button menu-search">Search</button>
+                <button class="col button menu-filter">Filter</button>
+              </p>
+            </div>
+            <!-- <div id="title-labels" class="block-title">Labels</div> -->
             <div class="list simple-list my-searchbar-not-found">
               <ul>
                 <li><i>Nothing found</i></li>
@@ -294,6 +300,98 @@
       
       </div>
       <!-- end: settings -->
+
+      <!-- search-options -->
+      <div class="popup popup-search-options">
+
+        <div class="page-content">
+
+          <div class="block-title">Search In</div>
+          <div class="list">
+            <ul>
+              <li>
+                <label class="item-radio item-content">
+                  <input type="radio" name="search_in" value="labels" />
+                  <i class="icon icon-radio"></i>
+                  <div class="item-inner">
+                    <div class="item-title">Labels only</div>
+                  </div>
+                </label>
+              </li>
+              <li>
+                <label class="item-radio item-content">
+                  <input type="radio" name="search_in" value="labels+content" />
+                  <i class="icon icon-radio"></i>
+                  <div class="item-inner">
+                    <div class="item-title">Labels and Translations (SLOW!)</div>
+                  </div>
+                </label>
+              </li>
+            </ul>
+          </div>
+
+          <div class="block-title">Case-sensitive search</div>
+          <div class="list">
+            <ul>
+              <li>
+                <label class="item-radio item-content">
+                  <input type="radio" name="search_casesens" value="yes" />
+                  <i class="icon icon-radio"></i>
+                  <div class="item-inner">
+                    <div class="item-title">Yes</div>
+                  </div>
+                </label>
+              </li>
+              <li>
+                <label class="item-radio item-content">
+                  <input type="radio" name="search_casesens" value="no" />
+                  <i class="icon icon-radio"></i>
+                  <div class="item-inner">
+                    <div class="item-title">No</div>
+                  </div>
+                </label>
+              </li>
+            </ul>
+          </div>
+
+        </div>
+
+      </div>
+      <!-- end: search-options -->
+
+      <!-- filter-options -->
+      <div class="popup popup-filter-options">
+
+        <div class="page-content">
+
+          <div class="block-title">Show Labels</div>
+          <div class="list">
+            <ul>
+              <li>
+                <label class="item-radio item-content">
+                  <input type="radio" name="filter_labels" value="all" />
+                  <i class="icon icon-radio"></i>
+                  <div class="item-inner">
+                    <div class="item-title">All</div>
+                  </div>
+                </label>
+              </li>
+              <li>
+                <label class="item-radio item-content">
+                  <input type="radio" name="filter_labels" value="leastone" />
+                  <i class="icon icon-radio"></i>
+                  <div class="item-inner">
+                    <div class="item-title">One or more missing translations only</div>
+                  </div>
+                </label>
+              </li>
+            </ul>
+          </div>
+
+        </div>
+
+      </div>
+      <!-- end: filter-options -->
 
     </div>
 

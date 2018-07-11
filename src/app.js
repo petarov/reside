@@ -19,7 +19,10 @@ const ID = {
   searchForm: 'form.searchbar',
   search: 'input[type="search"]',
   cfgEncoding: 'input[name="encoding"]',
-  cfgNewlines: 'input[name="newlines"]'
+  cfgNewlines: 'input[name="newlines"]',
+  cfgSearchIn: 'input[name="search_in"]',
+  cfgSearchCaseSens: 'input[name="search_casesens"]',
+  cfgFilterLabels: 'input[name="filter_labels"]',
 };
 
 class ResideApp {
@@ -106,7 +109,8 @@ class ResideApp {
     this._searchBar.disable();
     this._searchTimeout = null;
 
-    ResideApp.cssVisible(false, '#add-label', '#title-labels', '.searchbar');
+    ResideApp.cssVisible(false, 
+      '#add-label', '#title-labels', '.searchbar', '.label-options');
     $$('.app-version').text(`v${app.getVersion()}`);
 
     this._bundles = null;
@@ -183,6 +187,61 @@ class ResideApp {
       this._app.dialog.confirm('Are you sure?', 'Quit App', 
         () => ipcRenderer.sendSync('_quit'));
     });
+
+    $$('.menu-search').on('click', (e) => {
+      this._app.popup.create({
+        el: '.popup-search-options',
+        on: {
+          open: () => {
+            // bring back what was saved
+            const content = this.storage.search('content');
+            $$(`${ID.cfgSearchIn}[value='${content}']`).prop('checked', true);
+            const caseSensitive = this.storage.search('caseSensitive');
+            $$(`${ID.cfgSearchCaseSens}[value='${caseSensitive}']`).prop('checked', true);
+
+            const showToast = () => {
+              this._app.toast.create({
+                text: 'Search settings saved.', closeTimeout: Defs.TOAST_SHORT,
+              }).open();
+            };
+            $$(ID.cfgSearchIn).on('click', (e) => {
+              this.storage.search('content', e.target.value);
+              showToast();
+            });
+            $$(ID.cfgSearchCaseSens).on('click', (e) => {
+              this.storage.search('caseSensitive', e.target.value);
+              showToast();
+            });
+          },
+          close: () => this.filterLabels(this._searchBar.query)
+        }
+      }).open();
+    });
+
+    $$('.menu-filter').on('click', (e) => {
+      this._app.popup.create({
+        el: '.popup-filter-options',
+        on: {
+          open: () => {
+            // bring back what was saved
+            const labels = this.storage.filter('labels');
+            $$(`${ID.cfgFilterLabels}[value='${labels}']`).prop('checked', true);
+
+            const showToast = () => {
+              this._app.toast.create({
+                text: 'Filter settings saved.', closeTimeout: Defs.TOAST_SHORT,
+              }).open();
+            };
+            $$(ID.cfgFilterLabels).on('click', (e) => {
+              this.storage.filter('labels', e.target.value);
+              showToast();
+            });
+          }
+        },
+        close: () => this.filterLabels(this._searchBar.query)
+      }).open();
+    });
+
   }
 
   attachLabelListeners() {
@@ -228,7 +287,31 @@ class ResideApp {
     let labels = this._labels;
 
     if (expr) {
-      labels = this._labels.filter((v) => v.startsWith(expr));
+      let searchFn;
+
+      const isCaseSens = 'yes' === this.storage.search('caseSensitive');
+      if (!isCaseSens) {
+        expr = expr.toLowerCase();
+        searchFn = (v) => v.toLowerCase().indexOf(expr) > -1;
+      } else {
+        searchFn = (v) => v.indexOf(expr) > -1;
+      }
+
+      const isLabelsOnly = 'labels' === this.storage.search('content');
+
+      labels = this._labels.filter((v) => {
+        let result = searchFn(v);
+        if (!isLabelsOnly && !result) {
+          for (const bundle of this._bundles.values()) {
+            const translation = bundle.get(v);
+            if (translation && searchFn(translation)) {
+              return true;
+            }
+          }
+        }
+        return result;
+      });
+
     } else {
       $$(ID.search).val('');
     }
@@ -348,7 +431,8 @@ class ResideApp {
         this.editLabel(false);
         this.filterLabels(false);
         // allow search and adding new labels
-        ResideApp.cssVisible(true, '#add-label', '#title-labels', '.searchbar');
+        ResideApp.cssVisible(true, 
+          '#add-label', '#title-labels', '.searchbar', '.label-options');
         // notify user
         $$('#nav-title').text(name);
         this._app.toast.create({
@@ -357,7 +441,8 @@ class ResideApp {
         }).open();
       } else {
         // disallow search and adding new labels
-        ResideApp.cssVisible(false, '#add-label', '#title-labels', '.searchbar');
+        ResideApp.cssVisible(false, 
+          '#add-label', '#title-labels', '.searchbar', '.label-options');
         // notify user
         this._app.dialog.alert('No strings found in file!', 'Invalid bundle file');
       }
@@ -365,7 +450,8 @@ class ResideApp {
       this._app.dialog.close(); // close progress
       console.error('Failed loading file!', e);
       // disallow search and adding new labels
-      ResideApp.cssVisible(false, '#add-label', '#title-labels', '.searchbar');
+      ResideApp.cssVisible(false, 
+        '#add-label', '#title-labels', '.searchbar', '.label-options');
       // notify user
       this._app.dialog.alert('Failed loading file!');
     });
