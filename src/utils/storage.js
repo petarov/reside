@@ -10,7 +10,11 @@ const DEFAULTS = {
     recent: []
   },
   search: {
-    caseSensitive: true,
+    content: 'labels',
+    caseSensitive: 'yes',
+  },
+  filter: {
+    labels: 'all',
   },
   settings: {
     saveEncoding: 'utf8',
@@ -58,7 +62,7 @@ class Storage {
       obj[key] = val;
       return this.set(section, obj);
     }
-    return obj[key];
+    return obj[key] || DEFAULTS[section][key];
   }
 
   files(key, val) {
@@ -67,6 +71,10 @@ class Storage {
 
   search(key, val) {
     return this._section('search', key, val);
+  }
+
+  filter(key, val) {
+    return this._section('filter', key, val);
   }
 
   settings(key, val) {
