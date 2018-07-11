@@ -29,7 +29,7 @@ const ID = {
 class ResideApp {
 
   init() {
-    this.storage = new Storage(Defs.CONFIG_NAME);
+    this.storage = new Storage(app, Defs.CONFIG_NAME);
 
     const f7App = new Framework7({
       root: '#app',
@@ -94,7 +94,6 @@ class ResideApp {
       customSearch: true,
       on: {
         search: (sb, q, pq) => {
-          console.log(q);
           if (!this._searchTimeout) {
             this._searchTimeout = setTimeout(() => {
               // cancel timer
@@ -510,6 +509,11 @@ class ResideApp {
       // notify user
       this._app.dialog.alert('Nothing to save!');
     }
+  }
+
+  updateBounds(bounds) {
+    console.debug('New window bounds', bounds);
+    this.storage.mainWindow('bounds', bounds);
   }
 
   static cssVisible(visible, ...ids) {

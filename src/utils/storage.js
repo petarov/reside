@@ -1,8 +1,7 @@
 // storage.js
 "use strict";
 
-const electron = require('electron'),
-  path = require('path'),
+const path = require('path'),
   fs = require('fs');
 
 const DEFAULTS = {
@@ -19,6 +18,9 @@ const DEFAULTS = {
   settings: {
     saveEncoding: 'utf8',
     saveNewlines: 'lf'
+  },
+  mainWindow: {
+    bounds: {}
   }
 };
 
@@ -33,11 +35,13 @@ function loadStorage(filePath, defaults) {
 
 class Storage {
 
-  constructor(filename, defaults = DEFAULTS) {
-    const app = electron.remote.app || electron.app;
+  constructor(app, filename, defaults = DEFAULTS) {
+    //const app = electron.remote.app || electron.app;
     const userDataPath = process.env['HOME'] || process.env['USERPROFILE'] || app.getPath('userData');
     this.path = path.join(userDataPath, filename);
-    console.debug(`Using storage file ${this.path}`);
+    if (console) {
+      console.log(`Using storage file ${this.path}`);
+    }
     this.data = loadStorage(this.path, defaults);
   }
 
@@ -57,12 +61,14 @@ class Storage {
   }
 
   _section(section, key, val) {
-    const obj = this.get(section);
     if (val !== undefined) {
+      const obj = this.get(section) || {};
       obj[key] = val;
       return this.set(section, obj);
+    } else {
+      const obj = this.get(section);
+      return obj && obj[key] ? obj[key] : DEFAULTS[section][key];
     }
-    return obj[key] || DEFAULTS[section][key];
   }
 
   files(key, val) {
@@ -79,6 +85,10 @@ class Storage {
 
   settings(key, val) {
     return this._section('settings', key, val);
+  }
+
+  mainWindow(key, val) {
+    return this._section('mainWindow', key, val);
   }
 
 }

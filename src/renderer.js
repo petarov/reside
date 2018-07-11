@@ -1,7 +1,20 @@
+// renderer.js
 // This file is required by the index.html file and will
 // be executed in the renderer process for that window.
-// All of the Node.js APIs are available in this process.
 
+const { ipcRenderer } = require('electron');
 const ResideApp = require('./app');
 
-new ResideApp().init();
+const app = new ResideApp();
+app.init();
+
+let boundsTimer;
+
+ipcRenderer.on('_resize', (event, arg) => {
+  if (arg && !boundsTimer) {
+    boundsTimer = setTimeout(() => {
+      app.updateBounds(arg);
+      boundsTimer = null;
+    }, 2000);
+  }
+});

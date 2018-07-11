@@ -10,7 +10,8 @@ const {
   ipcMain
 } = require('electron');
 const path = require('path');
-const Defs = require('./defs');
+const Defs = require('./defs'),
+  Storage = require('./utils/storage');
 
 // *** DEBUG ***
 const DEBUG_ENABLED = process.argv.indexOf('withdebug') > -1,
@@ -51,25 +52,39 @@ function createSplashWindow() {
 }
 
 function createAppWindow() {
-  mainWindow = new BrowserWindow({
+  let opts = {
     width: Defs.APP_WINDOW_WIDTH,
     height: Defs.APP_WINDOW_HEIGHT,
     icon: path.join(__dirname, 'assets/icons/png/cat-vampire-icon-64x64.png')
-  });
+  };
 
+  // try resetting last known window position and size
+  const storage = new Storage(app, Defs.CONFIG_NAME);
+  const bounds = storage.mainWindow('bounds');
+  if (bounds) {
+    Object.assign(opts, bounds);
+  }
+
+  mainWindow = new BrowserWindow(opts);
   mainWindow.loadURL(`file://${__dirname}/index.html`);
-
   if (DEBUG_ENABLED) {
     mainWindow.webContents.openDevTools()
   }
 
   // Emitted when the window is closed.
-  mainWindow.once('closed', function () {
+  mainWindow.once('closed', () => {
     // Dereference the window object, usually you would store windows
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
     mainWindow = null;
   })
+
+  mainWindow.on('resize', (event, arg) => {
+    event.sender.send('_resize', mainWindow.getBounds());
+  });
+  mainWindow.on('move', (event, arg) => {
+    event.sender.send('_resize', mainWindow.getBounds());
+  });
 
   createMenu();
 }
