@@ -294,18 +294,22 @@ class ResideApp {
       this.editLabel(text);
     });
 
-    $$('#add-label').on('click', (e) => {
-      Utils.doAsync(() => {
-        this._app.dialog.prompt('Enter a label name', 'Add Label', (label) => {
-          if (label && !Utils.isComment(label)) {
-            this.addLabel(label.trim());
-          } else {
-            // notify user
-            this._app.dialog.alert('Invalid or empty label name!');
-          }
+    if (!this._addLabelHandler) {
+      this._addLabelHandler = (e) => {
+        Utils.doAsync(() => {
+          this._app.dialog.prompt('Enter a label name', 'Add Label', (label) => {
+            if (label && !Utils.isComment(label)) {
+              this.addLabel(label.trim());
+            } else {
+              // notify user
+              this._app.dialog.alert('Invalid or empty label name!');
+            }
+          });
         });
-      });
-    });
+      };
+    }
+    $$('#add-label').off('click', this._addLabelHandler);
+    $$('#add-label').on('click', this._addLabelHandler);
 
     this._searchBar.enable();
   }
@@ -323,7 +327,7 @@ class ResideApp {
 
     $$('.action-delete').on('click', (e) => {
       const label = $$(e.target).data('label');
-      const dialog = this._app.dialog.confirm(`Delete ${label} and translations?`, 
+      this._app.dialog.confirm(`Delete ${label} and translations?`,
         `Delete Label`, () => this.deleteLabel(label));
     });
   }
