@@ -18,6 +18,10 @@ class Utils {
     };
   }
 
+  static getBundleFilePath(dirpath, name, locale) {
+    return path.join(dirpath, `${name}_${locale}.properties`);
+  }
+
   static isComment(label) {
     return !label || label.startsWith('#') || label.startsWith(';') || label.startsWith('/');
   }

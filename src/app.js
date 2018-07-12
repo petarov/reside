@@ -167,7 +167,14 @@ class ResideApp {
                   this._app.dialog.confirm('Are your sure? Unsaved changes will be lost.',
                     'New File', (value) => newFileFn());
                 } else {
-                  // TODO add new locale
+                  this._app.dialog.prompt('Enter a locale name', 'Add New Locale', (value) => {
+                    if (value) {
+                      this.newLocale(value);
+                    } else {
+                      // notify user
+                      this._app.dialog.alert('Locale not specified!');
+                    }
+                  });
                 }
                 popup.close();
               });
@@ -470,6 +477,22 @@ class ResideApp {
     this.editLabel(newLabel);
   }
 
+  newLocale(locale) {
+    if (locale.length > 5) {
+      // notify user
+      this._app.dialog.alert('Invalid locale name! Use either (locale) or (locale_Country) format, e.g., `en` or `en_US`.');
+      return;
+    }
+
+    const { dirname, name } = Utils.getBundleName(
+      this._bundles.values().next().value.filepath);
+    const bundle = new ResBundle(
+      Utils.getBundleFilePath(dirname, name, locale), name, locale);
+    this._bundles.set(bundle.name, bundle);
+
+    this.updateLocaleChips();
+  }
+
   newBundles(bundleFilePath) {
     const { dirname, name, locale } = Utils.getBundleName(bundleFilePath);
     if (!name) {
@@ -491,12 +514,7 @@ class ResideApp {
     this.filterLabels(false);
     // allow search and adding new labels
     this.displayLabels(true);
-    const obj = { locales: [] };
-    for (const bundle of this._bundles.values()) {
-      obj.locales.push(bundle.locale);
-    }
-    const html = this._templates.locales(obj);
-    $$('#chip-locales').html(html);
+    this.updateLocaleChips();
     // notify user
     $$('#nav-title').text(name);
     this._app.toast.create({
@@ -522,12 +540,7 @@ class ResideApp {
         this.filterLabels(false);
         // allow search and adding new labels
         this.displayLabels(true);
-        const obj = { locales: [] };
-        for (const bundle of this._bundles.values()) {
-          obj.locales.push(bundle.locale);
-        }
-        const html = this._templates.locales(obj);
-        $$('#chip-locales').html(html);
+        this.updateLocaleChips();
         // notify user
         $$('#nav-title').text(name);
         this._app.toast.create({
@@ -587,8 +600,13 @@ class ResideApp {
     }
   }
 
-  enableEditting() {
-    
+  updateLocaleChips() {
+    const obj = { locales: [] };
+    for (const bundle of this._bundles.values()) {
+      obj.locales.push(bundle.locale);
+    }
+    const html = this._templates.locales(obj);
+    $$('#chip-locales').html(html);
   }
 
   updateBounds(bounds) {
