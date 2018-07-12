@@ -20,11 +20,8 @@ cache:
     - $HOME/.electron
 
 before_script:
-  - if [ $TRAVIS_OS_NAME = linux ]; then
-      "export DISPLAY=:99.0"
-      "sh -e /etc/init.d/xvfb start"
-      sleep 4 # give xvfb some time to start
-    fi
+  # give xvfb some time to start 
+  - if [ $TRAVIS_OS_NAME = linux ]; then "export DISPLAY=:99.0"; "sh -e /etc/init.d/xvfb start"; sleep 4; fi
 
 script:
   - echo $TRAVIS_OS_NAME
