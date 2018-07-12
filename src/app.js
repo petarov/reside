@@ -490,9 +490,12 @@ class ResideApp {
 
     const { dirname, name } = Utils.getBundleName(
       this._bundles.values().next().value.filepath);
-    const bundle = new ResBundle(
-      Utils.getBundleFilePath(dirname, name, locale), name, locale);
-    this._bundles.set(bundle.name, bundle);
+
+    const newBundleFilePath = Utils.getBundleFilePath(dirname, name, locale);
+    const newBundleFileName = Utils.getBundleName(newBundleFilePath).filename;
+
+    const bundle = new ResBundle(newBundleFilePath, newBundleFileName, locale);
+    this._bundles.set(bundle.filename, bundle);
 
     this.updateLocaleChips();
   }
@@ -512,7 +515,7 @@ class ResideApp {
     const bundle = new ResBundle(bundleFilePath, name, locale);
     this._labels = [];
     this._bundles = new Map();
-    this._bundles.set(bundle.name, bundle);
+    this._bundles.set(bundle.filename, bundle);
 
     this.editLabel(false);
     this.filterLabels(false);
@@ -522,7 +525,7 @@ class ResideApp {
     // notify user
     $$('#nav-title').text(name);
     this._app.toast.create({
-      text: `New ${bundle.name} opened.`,
+      text: `New ${bundle.filename} opened.`,
       closeTimeout: Defs.TOAST_NORMAL,
     }).open();
   }
@@ -590,7 +593,7 @@ class ResideApp {
           bundle.save({ newlineMode, encoding });
         }
 
-        savedNames.push(bundle.name);
+        savedNames.push(bundle.filename);
       }
 
       // notify user

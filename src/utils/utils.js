@@ -22,7 +22,7 @@ class Utils {
 
     return {
       dirname: path.dirname(filePath),
-      //filename: path.basename(filePath),
+      filename: path.basename(filePath),
       name: name,
       locale: locale
     };

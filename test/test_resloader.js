@@ -87,14 +87,14 @@ describe('resloader', () => {
 
           let { newName, saveFilePath } = bundleEN.rename('ZeroKeysGiven');
           assert.equal(newName, 'ZeroKeysGiven');
-          assert.equal(bundleEN.name, 'ZeroKeysGiven_en.properties');
+          assert.equal(bundleEN.filename, 'ZeroKeysGiven_en.properties');
           assert.equal(saveFilePath, `${__dirname}/data/ZeroKeysGiven_en.properties`);
           assert.equal(bundleEN.filepath, `${__dirname}/data/ZeroKeysGiven_en.properties`);
 
           const bundleDE = bundles.get('TestBundle_de.properties');
           const renres = bundleDE.rename('?*\\ZeroKeys\tGiven256()(!');
           assert.equal(renres.newName, 'ZeroKeysGiven256()(!');
-          assert.equal(bundleDE.name, 'ZeroKeysGiven256()(!_de.properties');
+          assert.equal(bundleDE.filename, 'ZeroKeysGiven256()(!_de.properties');
           assert.equal(renres.saveFilePath, `${__dirname}/data/ZeroKeysGiven256()(!_de.properties`);
           assert.equal(bundleDE.filepath, `${__dirname}/data/ZeroKeysGiven256()(!_de.properties`);
         });

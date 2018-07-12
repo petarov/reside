@@ -17,9 +17,9 @@ const NewlineMode = {
 
 class ResBundle {
 
-  constructor(filepath, name, locale) {
+  constructor(filepath, filename, locale) {
     this._filepath = filepath;
-    this._name = name;
+    this._filename = filename;
     this._locale = locale;
     this._strings = {};
   }
@@ -70,7 +70,7 @@ class ResBundle {
       saveFilePath = path.join(path.dirname(this._filepath), filename);
     }
 
-    this._name = filename;
+    this._filename = filename;
     this._filepath = saveFilePath;
 
     return { newName, saveFilePath };
@@ -131,8 +131,8 @@ class ResBundle {
     return this._filepath;
   }
 
-  get name() {
-    return this._name;
+  get filename() {
+    return this._filename;
   }
 
   get locale() {

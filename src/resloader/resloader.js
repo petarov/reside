@@ -89,7 +89,7 @@ class ResLoader {
       Promise.all(promised).then((loadedBundles) => {
         const bundles = new Map();
         for (const bundle of loadedBundles) {
-          bundles.set(bundle.name, bundle);
+          bundles.set(bundle.filename, bundle);
         }
         resolve({ index, bundles });
       }).catch((e) => {
