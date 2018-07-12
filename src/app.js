@@ -3,15 +3,13 @@
 
 const { ipcRenderer } = require('electron');
 const { app, dialog } = require('electron').remote;
-
-// const util = require('util');
-// const setTimeoutPromise = util.promisify(setTimeout);
+const path = require('path');
 
 const Framework7 = require('framework7'),
   Template7 = require('template7');
 const $$ = Dom7;
 
-const { ResLoader, NewlineMode } = require('./resloader');
+const { ResLoader, ResBundle, NewlineMode } = require('./resloader');
 const Defs = require('./defs'),
   {Utils, Storage} = require('./utils');
 
@@ -24,6 +22,7 @@ const ID = {
   cfgSearchIn: 'input[name="search_in"]',
   cfgSearchCaseSens: 'input[name="search_casesens"]',
   cfgFilterLabels: 'input[name="filter_labels"]',
+  cfgNewOptions: 'input[name="new_options"]',
 };
 
 class ResideApp {
@@ -146,7 +145,38 @@ class ResideApp {
      * Menus
      */
     $$('.menu-new').on('click', (e) => {
-      // TODO
+      const newFileFn = function () {
+        dialog.showSaveDialog({
+          title: 'Save new bundle file as',
+          defaultPath: 'NewBundle_en.properties',
+          filters: Defs.SUPPORTED_EXTENSIONS,
+        }, (filePath) => {
+          if (filePath) {
+            this.newBundles(filePath)
+          }
+        });
+      }.bind(this);
+
+      if (this._bundles) {
+        const popup = this._app.popup.create({
+          el: '.popup-new-options',
+          on: {
+            open: () => {
+              $$(ID.cfgNewOptions).once('click', (e) => {
+                if ('file' === e.target.value) {
+                  this._app.dialog.confirm('Are your sure? Unsaved changes will be lost.',
+                    'New File', (value) => newFileFn());
+                } else {
+                  // TODO add new locale
+                }
+                popup.close();
+              });
+            }
+          }
+        }).open();
+      } else {
+        newFileFn();
+      }
     });
 
     $$('.menu-open').on('click', (e) => {
@@ -156,15 +186,15 @@ class ResideApp {
           properties: ['openFile'],
           filters: Defs.SUPPORTED_EXTENSIONS,
         }, (filePaths) => {
-          this.openBundles(filePaths[0]);
+          if (filePaths) {
+            this.openBundles(filePaths[0]);
+          }
         });
       }.bind(this);
 
       if (this._bundles) {
         this._app.dialog.confirm('Are your sure? Unsaved changes will be lost.', 
-        'Open File', (value) => {
-          openFileFn();
-        });
+          'Open File', (value) => openFileFn());
       } else {
         openFileFn();
       }
@@ -256,6 +286,19 @@ class ResideApp {
       this.editLabel(text);
     });
 
+    $$('#add-label').on('click', (e) => {
+      Utils.doAsync(() => {
+        this._app.dialog.prompt('Enter a label name', 'Add Label', (label) => {
+          if (label && !Utils.isComment(label)) {
+            this.addLabel(label.trim());
+          } else {
+            // notify user
+            this._app.dialog.alert('Invalid or empty label name!');
+          }
+        });
+      });
+    });
+
     this._searchBar.enable();
   }
 
@@ -274,17 +317,6 @@ class ResideApp {
       const label = $$(e.target).data('label');
       const dialog = this._app.dialog.confirm(`Delete ${label} and translations?`, 
         `Delete Label`, () => this.deleteLabel(label));
-    });
-
-    $$('#add-label').on('click', (e) => {
-      this._app.dialog.prompt('Enter a label name', 'Add Label', (label) => {
-        if (label && !Utils.isComment(label)) {
-          this.addLabel(label.trim());
-        } else {
-          // notify user
-          this._app.dialog.alert('Invalid or empty label name!');
-        }
-      });
     });
   }
 
@@ -437,6 +469,41 @@ class ResideApp {
     this.editLabel(newLabel);
   }
 
+  newBundles(bundleFilePath) {
+    const { dirname, name, locale } = Utils.getBundleName(bundleFilePath);
+    if (!name) {
+      // notify user
+      this._app.dialog.alert('File name not specified!');
+      return;
+    } else if (!locale) {
+      // notify user
+      this._app.dialog.alert('File name does not specify a locale!');
+      return;
+    }
+
+    const bundle = new ResBundle(bundleFilePath, name, locale);
+    this._labels = [];
+    this._bundles = new Map();
+    this._bundles.set(bundle.name, bundle);
+
+    this.editLabel(false);
+    this.filterLabels(false);
+    // allow search and adding new labels
+    this.displayLabels(true);
+    const obj = { locales: [] };
+    for (const bundle of this._bundles.values()) {
+      obj.locales.push(bundle.locale);
+    }
+    const html = this._templates.locales(obj);
+    $$('#chip-locales').html(html);
+    // notify user
+    $$('#nav-title').text(name);
+    this._app.toast.create({
+      text: `New ${bundle.name} opened.`,
+      closeTimeout: Defs.TOAST_NORMAL,
+    }).open();
+  }
+
   openBundles(bundleFilePath) {
     const { dirname, name } = Utils.getBundleName(bundleFilePath);
 
@@ -517,6 +584,10 @@ class ResideApp {
       // notify user
       this._app.dialog.alert('Nothing to save!');
     }
+  }
+
+  enableEditting() {
+    
   }
 
   updateBounds(bounds) {
