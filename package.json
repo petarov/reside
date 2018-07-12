@@ -9,7 +9,8 @@
     "package": "electron-forge package",
     "dist": "electron-forge package --platform=win32,darwin",
     "make": "electron-forge make",
-    "test": "mocha"
+    "test": "mocha test test/ui-tests",
+    "testfn": "mocha test"
   },
   "repository": "https://github.com/petarov/reside",
   "keywords": [
@@ -28,7 +29,8 @@
     "chai-as-promised": "^7.1.1",
     "electron-forge": "^5.2.2",
     "electron-prebuilt-compile": "2.0.3",
-    "mocha": "^5.2.0"
+    "mocha": "^5.2.0",
+    "spectron": "^3.8.0"
   },
   "dependencies": {
     "electron-compile": "^6.4.3",

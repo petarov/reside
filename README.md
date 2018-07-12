@@ -37,6 +37,10 @@ To run a release preview:
 
     yarn demo
 
+# Sponsors
+
+<a href="https://midpoints.de/">![midpoints GmbH](https://midpoints.de/web/web.nsf/midpoints263x90.png)</a>
+
 # License
 
 [MIT License](LICENSE.md)
