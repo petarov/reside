@@ -1,4 +1,7 @@
-# Reside
+Reside
+====================
+
+[![Build Status](https://travis-ci.org/petarov/reside.svg?branch=master)](https://travis-ci.org/petarov/reside)
 
 ![Residé Himself](src/assets/icons/png/cat-vampire-icon-96x96.png)
 
