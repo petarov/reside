@@ -1,0 +1,26 @@
+language: node_js
+dist: trusty
+node_js:
+  - "8"
+
+branches:
+  only:
+    - master
+
+os:
+  - linux
+  - osx
+
+cache:
+  directories:
+    - node_modules
+    - $HOME/.electron
+
+script:
+  - echo $TRAVIS_OS_NAME
+  - node --version
+  - yarn --version
+  - yarn test
+
+notifications:
+  email: false
