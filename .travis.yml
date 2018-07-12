@@ -20,15 +20,21 @@ cache:
     - $HOME/.electron
 
 before_script:
-  - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
-  - sleep 4 # give xvfb some time to start
+  if [ $TRAVIS_OS_NAME == "linux" ]; then
+    - "export DISPLAY=:99.0"
+    - "sh -e /etc/init.d/xvfb start"
+    - sleep 4 # give xvfb some time to start
+  fi
 
 script:
   - echo $TRAVIS_OS_NAME
   - node --version
   - yarn --version
-  - yarn test
+  if [ $TRAVIS_OS_NAME == "linux" ]; then
+    - yarn test
+  else
+    - yarn testfn
+  fi
 
 notifications:
   email: false
