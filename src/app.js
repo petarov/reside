@@ -254,7 +254,7 @@ class ResideApp {
     });
 
     $$('.menu-filter').on('click', (e) => {
-      this._app.popup.create({
+      const popup = this._app.popup.create({
         el: '.popup-filter-options',
         on: {
           open: () => {
@@ -270,6 +270,7 @@ class ResideApp {
             $$(ID.cfgFilterLabels).on('click', (e) => {
               this.storage.filter('labels', e.target.value);
               showToast();
+              popup.close();
             });
           },
           close: () => this.filterLabels(this._searchBar.query)
