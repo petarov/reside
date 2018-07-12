@@ -5,7 +5,7 @@ Reside [![Build Status](https://travis-ci.org/petarov/reside.svg?branch=master)]
 
 A [Java-ResourceBundle](https://docs.oracle.com/javase/7/docs/api/java/util/ResourceBundle.html) files GUI editor app for the desktop.
 
-![Reside App Screenshot](https://i.imgur.com/q2PHbEP.png)
+![Reside App Screenshot](https://i.imgur.com/sZsJLgf.png)
 
 # Eh, what?
 
