@@ -617,7 +617,7 @@ class ResideApp {
   }
 
   updateBounds(bounds) {
-    console.debug('New window bounds', bounds);
+    console.log('New window bounds', bounds);
     this.storage.mainWindow('bounds', bounds);
   }
 

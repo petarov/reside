@@ -28,7 +28,7 @@ function loadStorage(filePath, defaults) {
   try {
     return JSON.parse(fs.readFileSync(filePath));
   } catch(e) {
-    console.debug(`Error parsing storage ${filePath} !`, e);
+    console.warn(`Error parsing storage ${filePath} !`, e.message);
     return defaults;
   }
 }

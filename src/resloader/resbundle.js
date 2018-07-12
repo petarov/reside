@@ -25,7 +25,7 @@ class ResBundle {
   }
 
   save(opts = { newlineMode: NewlineMode.LF, encoding: 'utf8' }) {
-    console.debug(`Saving bundle to ${this._filepath} ...`);
+    console.info(`Saving bundle to ${this._filepath} ...`);
 
     let utf8 = false;
     if ('utf8' === opts.encoding) {
@@ -86,13 +86,13 @@ class ResBundle {
 
       // true, if at least one ucs2/ucs2 encoded as ascii character is found
       let ucs2 = false;
-  
+
       lineReader.on('line', (line) => {
         //console.log('Line: ', line);
-        
+
         // Comments starting with # // ;
         if (Utils.isComment(line)) {
-          console.debug(`Skipped comment line= ${line}`);
+          console.log(`Skipped comment line= ${line}`);
           return;
         }
 
