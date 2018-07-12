@@ -72,6 +72,27 @@ describe('resloader', () => {
           assert.equal(bundles.get('TestBundle_de.properties').size, 20);
           assert.equal(bundles.get('TestBundle_en.properties').locale, 'en');
           assert.equal(bundles.get('TestBundle_en.properties').size, 19);
+          // test DE locale texts
+          const nameDE = 'TestBundle_de.properties';
+          assert.equal(bundles.get(nameDE).get('ButtonConfirm'), 'Bestätigen');
+          assert.equal(bundles.get(nameDE).get('Reset'), 'Zurücksetzen');
+          assert.equal(bundles.get(nameDE).get('SelectedObject'), 'Gewähltes Objekt');
+        });
+    });
+
+    it('should load unescaped texts - EscapeBundle', () => {
+      return new ResLoader()
+        .path(`${__dirname}/data`)
+        .name('EscapeBundle')
+        .load().then((result) => {
+          const name = 'EscapeBundle_de.properties';
+          const {index, bundles} = result;
+          assert.notEqual(index, null);
+          assert.notEqual(index, {});
+          assert.equal(bundles.size, 1);
+          assert.equal(bundles.get(name).get('Message_Greeting'), 'Grüße "user1"!');
+          assert.equal(bundles.get(name).get('Message_Categories'), 'Category Buildings\\House\\Tiny');
+          assert.equal(bundles.get(name).get('Message_Categories2'), 'Reisen\\Hotels');
         });
     });
   });

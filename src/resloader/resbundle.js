@@ -78,7 +78,7 @@ class ResBundle {
 
   reload(index) {
     return new Promise((resolve, reject) => {
-      console.debug(`Loading ${this._filepath} ...`);
+      console.info(`Loading ${this._filepath} ...`);
 
       const lineReader = readline.createInterface({
         input: fs.createReadStream(this._filepath)
@@ -102,17 +102,29 @@ class ResBundle {
 
         try {
           if (ucs2 || right.indexOf('\\u') > -1) {
+            // spare us further scanning when at least ony ucs2 char is found
             ucs2 = true;
-            right = JSON.parse(`"${right.replace(/\"/g, '\\"')}"`);
+            /**
+             * Holy mother of ugly dragons! WTH is this?
+             * Strings with ascii ucs2 char representation and non-escaped punctuation, e.g.,
+             * 'Gr\\u00fc\\u00dfe "user1" House\\Test\\Boiler!', deserve special treatment.
+             *
+             * I could find no other way than JSON.parse() to convert double-slash (\\u00fc) 
+             * chars to unicode! Nothing. However, even though it does in fact convert unicode
+             * it fails to handle double slashes and quotes so regex pre-processing is required.
+             *
+             * You got a better idea? Open a PR, please.
+             */
+            right = right.replace(/\\/g, '\\\\').replace(/\\\\u/g, '\\u').replace(/\"/g, '\\"');
+            right = JSON.parse(`"${right}"`);
           }
 
           // convert all known new line markers
           right = right.replace(/(\\n)|(<br>)|(\\r\\n)/g, '\n');
 
           this.strings[left] = right;
-        } catch (e) {
-          console.error(`Failed parsing line= ${line}`);
-          // TODO: log error for given line
+        } catch (err) {
+          console.warn(`Failed parsing line= ${line}`, err.message);
           this.strings[left] = right;
         }
 
