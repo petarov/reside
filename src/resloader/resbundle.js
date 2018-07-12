@@ -162,7 +162,6 @@ class ResBundle {
     assert(key !== null);
     delete this._strings[key];
   }
-
 }
 
 module.exports = {

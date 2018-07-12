@@ -9,12 +9,22 @@ class Utils {
 
   static getBundleName(filePath) {
     assert(!!filePath);
-    const parts = path.basename(filePath, path.extname(filePath)).split('_', 2);
+    
+    let name, locale;
+
+    const stripped = path.basename(filePath, path.extname(filePath));
+    const pos = stripped.indexOf('_');
+    if (pos > -1) {
+      name = stripped.substring(0, pos);
+      locale = stripped.substring(pos + 1);
+    }
+    //const parts = path.basename(filePath, path.extname(filePath)).split('_', 2);
+
     return {
       dirname: path.dirname(filePath),
       //filename: path.basename(filePath),
-      name: parts[0],
-      locale: parts[1]
+      name: name,
+      locale: locale
     };
   }
 

@@ -11,11 +11,28 @@ chai.use(chaiAsPromised);
 describe('utils', () => {
 
   describe('#getBundleName()', () => {
-    it('resolve bundle file components', () => {
-      const {dirname, name} = Utils.getBundleName(
+    it('resolve bundle file components #1', () => {
+      const {dirname, name, locale} = Utils.getBundleName(
         `${__dirname}/data/TestBundle_en.properties`);
         assert.equal(dirname, `${__dirname}/data`);
         assert.equal(name, 'TestBundle');
+        assert.equal(locale, 'en');
+    });
+
+    it('resolve bundle file components #2', () => {
+      const {dirname, name, locale} = Utils.getBundleName(
+        `${__dirname}/data/TestBundle_en-US.properties`);
+        assert.equal(dirname, `${__dirname}/data`);
+        assert.equal(name, 'TestBundle');
+        assert.equal(locale, 'en-US');
+    });
+
+    it('resolve bundle file components #3', () => {
+      const {dirname, name, locale} = Utils.getBundleName(
+        `${__dirname}/data/TestBundle_en_US.properties`);
+        assert.equal(dirname, `${__dirname}/data`);
+        assert.equal(name, 'TestBundle');
+        assert.equal(locale, 'en_US');
     });
   });
 
