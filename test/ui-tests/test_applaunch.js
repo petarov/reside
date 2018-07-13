@@ -9,7 +9,7 @@ chai.should();
 chai.use(chaiAsPromised);
 
 describe('Application launch', function () {
-  this.timeout(20000);
+  this.timeout(10000);
 
   beforeEach(() => {
     this.app = new Application({
@@ -19,7 +19,7 @@ describe('Application launch', function () {
       path: electronPath,
       args: [path.join(__dirname, '../..')]
     });
-    console.log('Test App Path ', this.app);
+    console.log('Test App => ', this.app);
     return this.app.start();
   });
 
