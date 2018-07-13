@@ -9,7 +9,7 @@ branches:
 
 os:
   - linux
-  - osx
+#  - osx
 
 git:
   depth: false
@@ -20,7 +20,10 @@ cache:
     - $HOME/.electron
 
 before_script:
-  - ./.travis/run-xvfb.sh
+#  - ./.travis/run-xvfb.sh
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
+  - sleep 3
 
 script:
   - echo $TRAVIS_OS_NAME
