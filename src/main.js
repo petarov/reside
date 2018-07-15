@@ -37,18 +37,16 @@ function createSplashWindow() {
 
   splashWindow.once('show', () => {
     setTimeout(() => {
+      createAppWindow();
       splashWindow.close();
     }, Defs.SPLASH_TIMEOUT);
   });
 
   splashWindow.once('closed', () => {
     splashWindow = null;
-    createAppWindow();
   });
 
-  splashWindow.once('ready-to-show', () => {
-    splashWindow.show()
-  })
+  splashWindow.once('ready-to-show', () => splashWindow.show());
 }
 
 function createAppWindow() {
@@ -77,7 +75,7 @@ function createAppWindow() {
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
     mainWindow = null;
-  })
+  });
 
   mainWindow.on('resize', (event, arg) => {
     event.sender.send('_resize', mainWindow.getBounds());
@@ -90,8 +88,8 @@ function createAppWindow() {
 }
 
 function createMenu() {
-  const mainMenu = require('./menu.js');
-  Menu.setApplicationMenu(mainMenu.createMainMenu());
+  //const mainMenu = require('./menu.js');
+  //Menu.setApplicationMenu(mainMenu.createMainMenu());
 }
 
 // This method will be called when Electron has finished
