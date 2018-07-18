@@ -6,9 +6,8 @@
   "scripts": {
     "start": "electron-forge start -- withdebug nosplash",
     "demo": "electron-forge start",
-    "package": "electron-forge package",
-    "dist": "electron-forge package --platform=win32,darwin",
-    "make": "electron-forge make",
+    "pack": "electron-forge package --platform=darwin --platform=win32 --arch=x64",
+    "dist": "electron-forge make --platform=darwin --platform=win32 --arch=x64",
     "test": "mocha test test/ui-tests",
     "testfn": "mocha test"
   },
@@ -46,10 +45,10 @@
     "forge": {
       "make_targets": {
         "win32": [
-          "squirrel"
+          "zip"
         ],
         "darwin": [
-          "zip"
+          "dmg"
         ],
         "linux": [
           "deb",
