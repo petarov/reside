@@ -151,6 +151,26 @@ function createMainMenu(app) {
       { type: 'separator' },
       { role: 'front' }
     ];
+  } else {
+    /* Windows, Linux */
+    template.unshift({
+      label: 'File',
+      submenu: [
+        {
+          label: `Settings`,
+          click() { send('_settings'); }
+        },
+        {
+          label: `About ${app.getName()}`,
+          click() { send('_about'); }
+        },
+        { type: 'separator' },
+        {
+          label: `Quit`,
+          click() { send('_askquit'); }
+        }
+      ]
+    });
   }
 
   return Menu.buildFromTemplate(template);
