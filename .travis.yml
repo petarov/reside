@@ -8,8 +8,8 @@ branches:
     - master
 
 os:
-  - linux
-#  - osx
+#  - linux
+  - osx
 
 git:
   depth: false
@@ -21,15 +21,15 @@ cache:
 
 before_script:
 #  - ./.travis/run-xvfb.sh
-  - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
-  - sleep 3
+#  - "export DISPLAY=:99.0"
+#  - "sh -e /etc/init.d/xvfb start"
+  - sleep 2
 
 script:
   - echo $TRAVIS_OS_NAME
   - node --version
   - yarn --version
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then yarn test; else yarn testfn; fi
+  - yarn test
 
 notifications:
   email:
