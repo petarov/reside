@@ -117,6 +117,24 @@ class ResideApp {
     this.virtualList = null;
     this.attachMenuListeners();
     this.editLabel(false);
+
+    /**
+     * Menu actions
+     */
+    ipcRenderer.on('_about', () => {
+      this._app.popup.create({
+        el: '.popup-about',
+        on: {
+          open: () => {
+            $$('.about-version').text(`v${app.getVersion()}`);
+          }
+        }
+      }).open();
+    });
+    ipcRenderer.on('_settings', () => {
+      this.mainView.router.navigate('/settings/');
+    });
+    ipcRenderer.on('_askquit', () => this.askQuit());
   }
 
   displayLabels(visible) {
@@ -225,10 +243,7 @@ class ResideApp {
       }
     });
 
-    $$('.menu-quit').on('click', (e) => {
-      this._app.dialog.confirm('Are you sure?', 'Quit App', 
-        () => ipcRenderer.sendSync('_quit'));
-    });
+    $$('.menu-quit').on('click', () => this.askQuit());
 
     $$('.menu-search').on('click', (e) => {
       this._app.popup.create({
@@ -605,6 +620,11 @@ class ResideApp {
       // notify user
       this._app.dialog.alert('Nothing to save!');
     }
+  }
+
+  askQuit() {
+    this._app.dialog.confirm('Are you sure?', 'Quit App',
+      () => ipcRenderer.sendSync('_quit'));
   }
 
   updateLocaleChips() {
