@@ -1,7 +1,7 @@
 // app.js
 "use strict";
 
-const { ipcRenderer } = require('electron');
+const { ipcRenderer, shell } = require('electron');
 const { app, dialog } = require('electron').remote;
 const path = require('path');
 
@@ -127,6 +127,8 @@ class ResideApp {
         on: {
           open: () => {
             $$('.about-version').text(`v${app.getVersion()}`);
+            $$('.about-link-repo').on('click', () => shell.openExternal('https://git.io/fNGBO'));
+            $$('.about-link-icon').on('click', () => shell.openExternal('http://www.iconka.com'));
           }
         }
       }).open();
