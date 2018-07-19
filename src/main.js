@@ -89,7 +89,7 @@ function createAppWindow() {
 
 function createMenu() {
   const mainMenu = require('./menu.js');
-  Menu.setApplicationMenu(mainMenu.createMainMenu(app));
+  Menu.setApplicationMenu(mainMenu.createMainMenu(app, { DEBUG_ENABLED }));
 }
 
 // This method will be called when Electron has finished

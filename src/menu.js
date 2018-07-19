@@ -17,7 +17,7 @@ function send(what) {
   window.webContents.send(what);
 }
 
-function createMainMenu(app) {
+function createMainMenu(app, opts) {
   const template = [
     {
       label: 'Edit',
@@ -71,7 +71,7 @@ function createMainMenu(app) {
           click() { 
             const body = `
 <!-- Please describe the issue you have and the steps required to reproduce it. -->
-<!-- The following information is required -->
+<!-- The following information is required, please do not remove it. -->
 
 > ${app.getName()} ${app.getVersion()}
 > Electron ${process.versions.electron}
@@ -80,17 +80,17 @@ function createMainMenu(app) {
           }
         },
         { type: 'separator' },
-	      {
-          label: `Visit midpoints`,
-          click() {
-            shell.openExternal('https://midpoints.de');
-          }
-        },
-        { type: 'separator' },
         {
           label: `View &License`,
           click() {
             shell.openExternal('https://github.com/petarov/reside/blob/master/LICENSE');
+          }
+        },
+        { type: 'separator' },
+        {
+          label: `Visit midpoints GmbH`,
+          click() {
+            shell.openExternal('https://midpoints.de');
           }
         },
         { type: 'separator' },
@@ -104,6 +104,11 @@ function createMainMenu(app) {
       ]
     }
   ];
+
+  if (!opts.DEBUG_ENABLED) {
+    template[1].submenu[0].accelerator = undefined;
+    template[1].submenu.splice(1, 1);
+  }
 
   if (process.platform === 'darwin') {
     template.unshift({
