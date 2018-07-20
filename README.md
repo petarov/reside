@@ -18,9 +18,10 @@ IDEs like IntelliJ already provide mature and reliable resource bundles [editor 
 Here's an outline of what Reside can do:
 
   - Edit all available bundle locale files simultaneously.
-  - Add new locales to loaded bundle files.
-  - Search for labels, texts in all loaded bundle files.
-  - Support for saving the files as either `utf8` or `latin1` encoded. Choosing the latter will automatically escape all `ucs2` characters, .e.g, `\u00e4`.
+  - Add new locales to existing bundles.
+  - Search in all labels and/or content across all loaded bundles.
+  - Filtering. Show only labels for which a translation is missing.
+  - Support for saving the bundles as either `utf8` or `latin1` encoded. Choosing the latter will automatically escape all `ucs2` characters, .e.g, `\u00e4`.
   - Select whether to use `LF`, `CRLF` or html `<br>` for new lines in translations.
 
 # Development
@@ -45,4 +46,4 @@ To run a release preview:
 
 [MIT License](LICENSE.md)
 
-Logo and icons [license](src/assets/icons/README.md).
+Avatar icon [license](src/assets/icons/README.md).
