@@ -1,6 +1,6 @@
 {
   "name": "reside",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "Reside is a minimalistic Java ResourceBundle files editor.",
   "main": "./src/main.js",
   "scripts": {
