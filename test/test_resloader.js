@@ -95,6 +95,23 @@ describe('resloader', () => {
           assert.equal(bundles.get(name).get('Message_Categories2'), 'Reisen\\Hotels');
         });
     });
+
+    it('should load duplicate translations - TestDuplicates', () => {
+      return new ResLoader()
+        .path(`${__dirname}/data`)
+        .name('TestDuplicates')
+        .load().then((result) => {
+          const { index, bundles, duplicates } = result;
+          assert.notEqual(index, null);
+          assert.notEqual(index, {});
+          assert.notEqual(duplicates, null);
+          assert.notEqual(duplicates, {});
+          assert.equal(bundles.size, 2);
+          assert.ok('ButtonClear_DUP1' in duplicates);
+          assert.ok('DialogName_DUP1' in duplicates);
+          assert.ok('DialogName_DUP2' in duplicates);
+        });
+    });
   });
 
   describe('#rename()', () => {
