@@ -80,7 +80,8 @@ class ResideApp {
       labels: Template7.compile($$('script#tpl-labels').html()),
       locales: Template7.compile($$('script#tpl-locales-chips').html()),
       translations: Template7.compile($$('script#tpl-translations').html()),
-      translationsActions: Template7.compile($$('script#tpl-translations-actions').html())
+      translationsActions: Template7.compile($$('script#tpl-translations-actions').html()),
+      duplicateLabels: Template7.compile($$('script#tpl-duplicate-labels').html())
     };
 
     // bind search bar
@@ -352,8 +353,6 @@ class ResideApp {
   filterLabels(expr) {
     let labels;
 
-    const isAllLabels = 'all' === this.storage.filter('labels');
-
     if (expr) {
       let searchFn;
 
@@ -383,9 +382,11 @@ class ResideApp {
     } else {
       $$(ID.search).val('');
 
-      if (isAllLabels) {
+      const filterType = this.storage.filter('labels');
+
+      if ('all' === filterType) {
         labels = this._labels;
-      } else {
+      } else if ('leastone' === filterType) {
         labels = this._labels.filter((v) => {
           for (const bundle of this._bundles.values()) {
             const translation = bundle.get(v);
@@ -395,6 +396,12 @@ class ResideApp {
           }
           return false;
         });
+      } else if ('onlydups' === filterType) {
+        labels = this._labels.filter((v) => {
+          return v in this._duplicates;
+        });
+        // sort just so that duplicates are right below the original label
+        labels.sort();
       }
     }
 
@@ -531,6 +538,7 @@ class ResideApp {
 
     const bundle = new ResBundle(bundleFilePath, name, locale);
     this._labels = [];
+    this._duplicates = {};
     this._bundles = new Map();
     this._bundles.set(bundle.filename, bundle);
 
@@ -555,10 +563,11 @@ class ResideApp {
     new ResLoader().path(dirname).name(name).load().then((result) => {
       this._app.dialog.close(); // close progress
 
-      const { bundles, index } = result;
+      const { bundles, index, duplicates } = result;
 
       if (bundles.size > 0) {
         this._labels = Object.keys(index).map((key) => key);
+        this._duplicates = duplicates;
         this._bundles = bundles;
         this.editLabel(false);
         this.filterLabels(false);
@@ -571,11 +580,15 @@ class ResideApp {
           text: `Loaded ${bundles.size} file(s) for ${name}.`,
           closeTimeout: Defs.TOAST_NORMAL,
         }).open();
+        // notify user about duplicates
+        if (Object.keys(this._duplicates).length > 0) {
+          Utils.doAsync(() => this.showDuplicates());
+        }
       } else {
         // disallow search and adding new labels
         this.displayLabels(false);
         // notify user
-        this._app.dialog.alert('No strings found in file!', 'Invalid bundle file');
+        this._app.dialog.alert('No strings found in file(s)!', 'Invalid bundle(s)');
       }
     }).catch((e) => {
       this._app.dialog.close(); // close progress
@@ -641,6 +654,18 @@ class ResideApp {
   updateBounds(bounds) {
     console.log('New window bounds', bounds);
     this.storage.mainWindow('bounds', bounds);
+  }
+
+  showDuplicates() {
+    this._app.popup.create({
+      el: '.popup-duplicates',
+      on: {
+        open: () => {
+          $$('#duplicate-labels').html(
+            this._templates.duplicateLabels({ duplicates: this._duplicates }));
+        }
+      }
+    }).open();
   }
 
   static cssVisible(visible, ...ids) {

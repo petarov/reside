@@ -156,7 +156,6 @@
         </div>
       
         <div class="page-content">
-      
           <div class="list no-hairlines-md">
       
             <script id="tpl-translations" type="text/template7">
@@ -319,7 +318,6 @@
 
       <!-- search-options -->
       <div class="popup popup-search-options">
-
         <div class="page-content">
 
           <div class="block-title">Search In</div>
@@ -371,13 +369,11 @@
           </div>
 
         </div>
-
       </div>
       <!-- end: search-options -->
 
       <!-- filter-options -->
       <div class="popup popup-filter-options">
-
         <div class="page-content">
 
           <div class="block-title">Show Labels</div>
@@ -401,17 +397,24 @@
                   </div>
                 </label>
               </li>
+              <li>
+                <label class="item-radio item-content">
+                  <input type="radio" name="filter_labels" value="onlydups" />
+                  <i class="icon icon-radio"></i>
+                  <div class="item-inner">
+                    <div class="item-title">Duplicate labels only</div>
+                  </div>
+                </label>
+              </li>
             </ul>
           </div>
 
         </div>
-
       </div>
       <!-- end: filter-options -->
 
       <!-- new-options -->
       <div class="popup popup-new-options">
-      
         <div class="page-content">
       
           <div class="block-title">Create New File or Locale</div>
@@ -439,13 +442,35 @@
           </div>
       
         </div>
-      
       </div>
       <!-- end: new-options -->
 
+      <!-- duplicates -->
+      <div class="popup popup-duplicates">
+        <div class="page-content">
+
+          <div class="block-title">Duplicate Labels</div>
+          <div class="card">
+            <div class="card-content card-content-padding">Make sure you resolve the duplicate label translations before saving your bundles. Use the filter to show only duplicates.</div>
+          </div>
+          <div class="list simple-list">
+            <ul id="duplicate-labels">
+              <!-- tpl-duplicate-labels -->
+            </ul>
+          </div>
+
+          <script id="tpl-duplicate-labels" type="text/template7">
+          {{#each duplicates}}
+          <li>{{@key}}</li>
+          {{/each}}
+          </script>
+
+        </div>
+      </div>
+      <!-- end: duplicates -->
+
       <!-- about -->
       <div class="popup popup-about">
-
         <div class="page-content">
 
           <div class="block-title">About Reside</div>
@@ -464,8 +489,8 @@
           <div class="display-flex justify-content-center">
              Avatar icon (Residé, the cat) by&nbsp;<a href="#" class="about-link-icon">Iconka.com</a>
           </div>
-        </div>
 
+        </div>
       </div>
       <!-- end: about -->
 
