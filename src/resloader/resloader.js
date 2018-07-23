@@ -82,16 +82,18 @@ class ResLoader {
   _loadFiles(files) {
     return new Promise((resolve, reject) => {
       const index = {};
+      const duplicates = {};
 
       const promised = files.map((entry) => new ResBundle(
-        path.join(this._path, entry.file), entry.file, entry.locale).reload(index));
+        path.join(this._path, entry.file), entry.file, entry.locale).reload(
+          index, duplicates));
 
       Promise.all(promised).then((loadedBundles) => {
         const bundles = new Map();
         for (const bundle of loadedBundles) {
           bundles.set(bundle.filename, bundle);
         }
-        resolve({ index, bundles });
+        resolve({ bundles, index, duplicates });
       }).catch((e) => {
         console.error(`Error loading bundle file!`, e);
         reject(e);

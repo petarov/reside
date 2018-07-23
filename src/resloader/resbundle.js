@@ -15,6 +15,9 @@ const NewlineMode = {
   BR: { ascii: '<br>', utf8: '<br>' }
 };
 
+const MAX_DUPLICATES = 100;
+const DUPLICATE_SUFFIX = '_DUP';
+
 class ResBundle {
 
   constructor(filepath, filename, locale) {
@@ -76,7 +79,39 @@ class ResBundle {
     return { newName, saveFilePath };
   }
 
-  reload(index) {
+  _addItem(key, value, index, duplicates) {
+    if (!(key in this.strings)) {
+      this.strings[key] = value;
+      if (index) {
+        index[key] = null;
+      }
+    } else {
+      let counter = 1;
+      let idx;
+      while (counter < MAX_DUPLICATES) {
+        idx = `${key}${DUPLICATE_SUFFIX}${counter}`;
+        if (!(idx in this.strings)) {
+          this.strings[idx] = value;
+          if (index) {
+            index[idx] = null;
+          }
+          if (duplicates) {
+            duplicates[key] = null;
+            duplicates[idx] = null;
+            // if (!(key in duplicates)) {
+            //   duplicates[key] = [];
+            // }
+            // duplicates[key].push(idx);
+          }
+          console.warn(`Found duplicate for ${key}. Added as ${idx}`);
+          break;
+        }
+        counter++;
+      }
+    }
+  }
+
+  reload(index, duplicates) {
     return new Promise((resolve, reject) => {
       console.info(`Loading ${this._filepath} ...`);
 
@@ -122,14 +157,10 @@ class ResBundle {
           // convert all known new line markers
           right = right.replace(/(\\n)|(<br>)|(\\r\\n)/g, '\n');
 
-          this.strings[left] = right;
+          this._addItem(left, right, index, duplicates);
         } catch (err) {
           console.warn(`Failed parsing line= ${line}`, err.message);
-          this.strings[left] = right;
-        }
-
-        if (index) {
-          index[left] = null;
+          this._addItem(left, right, index, duplicates);
         }
       });
 
