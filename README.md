@@ -1,21 +1,21 @@
-Reside [![Build Status](https://travis-ci.org/petarov/reside.svg?branch=master)](https://travis-ci.org/petarov/reside)
+ResIDE [![Build Status](https://travis-ci.org/petarov/reside.svg?branch=master)](https://travis-ci.org/petarov/reside)
 ====================
 
 ![Residé Himself](src/assets/icons/png/cat-vampire-icon-96x96.png)
 
 A [Java-ResourceBundle](https://docs.oracle.com/javase/7/docs/api/java/util/ResourceBundle.html) files GUI editor app for the desktop.
 
-![Reside App Screenshot](https://i.imgur.com/sZsJLgf.png)
+![ResIDE App Screenshot](https://i.imgur.com/sZsJLgf.png)
 
 # Eh, what?
 
-Reside is an app that allows for editing or creating new [PropertyResourceBundle](https://docs.oracle.com/javase/7/docs/api/java/util/PropertyResourceBundle.html) files that are normally used to localize Java applications. Those are simply key/value text files that may also be viewed in an text editor or in an IDE, which brings us to the next question.
+ResIDE is an app that allows for editing or creating new [PropertyResourceBundle](https://docs.oracle.com/javase/7/docs/api/java/util/PropertyResourceBundle.html) files that are normally used to localize Java applications. Those are simply key/value text files that may also be viewed in an text editor or in an IDE, which brings us to the next question.
 
 # Why?
 
 IDEs like IntelliJ already provide mature and reliable resource bundles [editor UI](https://www.jetbrains.com/help/idea/resource-bundle-editor.html), so this tool does not offer anything new for developers. However, it is not just developers that need to edit and maintain locale-specific data. Other members on your team that do not have or need access to an IDE may benefit from using this app. 
 
-Here's an outline of what Reside can do:
+Here's an outline of what ResIDE can do:
 
   - Edit all available bundle locale files simultaneously.
   - Add new locales to existing bundles.

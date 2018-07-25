@@ -8,6 +8,7 @@ const {
   BrowserWindow
 } = require('electron');
 const os = require('os');
+const Defs = require('./defs');
 
 function send(what) {
   const window = BrowserWindow.getAllWindows()[0];
@@ -112,14 +113,14 @@ function createMainMenu(app, opts) {
 
   if (process.platform === 'darwin') {
     template.unshift({
-      label: app.getName(),
+      label: Defs.APP_NAME,
       submenu: [
         {
           label: `Settings`,
           click() { send('_settings'); }
         },
         {
-          label: `About ${app.getName()}`,
+          label: `About ${Defs.APP_NAME}`,
           click() { send('_about'); }
         },
         { type: 'separator' },

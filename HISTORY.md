@@ -1,4 +1,4 @@
-Reside Changes
+ResIDE Changes
 ================
 
 ### 0.0.11

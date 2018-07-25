@@ -3,6 +3,8 @@
 
 module.exports = {
 
+  APP_NAME: 'ResIDE',
+
   SPLASH_WINDOW_WIDTH: 624,
   SPLASH_WINDOW_HEIGHT: 324,
   SPLASH_TIMEOUT: 3500,

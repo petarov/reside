@@ -32,14 +32,12 @@ class ResideApp {
 
     const f7App = new Framework7({
       root: '#app',
-      name: 'Reside',
+      name: Defs.APP_NAME,
       id: 'net.vexelon.reside.desktop',
-
       panel: {
         swipe: 'left',
         leftBreakpoint: 960,
       },
-
     });
 
     // left panel view
@@ -638,7 +636,7 @@ class ResideApp {
   }
 
   askQuit() {
-    this._app.dialog.confirm('Are you sure?', 'Quit App',
+    this._app.dialog.confirm('Are you sure?', `Quit ${Defs.APP_NAME}`,
       () => ipcRenderer.sendSync('_quit'));
   }
 
