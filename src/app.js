@@ -17,6 +17,7 @@ const ID = {
   labelsCount: '.chip-num-translations',
   searchForm: 'form.searchbar',
   search: 'input[type="search"]',
+  export: 'button.action-export',
   cfgEncoding: 'input[name="encoding"]',
   cfgNewlines: 'input[name="newlines"]',
   cfgSearchIn: 'input[name="search_in"]',
@@ -241,6 +242,22 @@ class ResideApp {
             this._app.dialog.alert('Name not specified!');
           }
         });
+      }
+    });
+
+    $$('.menu-export').on('click', (e) => {
+      if (this._bundles) {
+        const popup = this._app.popup.create({
+          el: '.popup-export',
+          on: {
+            open: () => {
+              $$(ID.export).on('click', (e) => {
+                popup.close();
+                // TODO
+              });
+            }
+          }
+        }).open();
       }
     });
 

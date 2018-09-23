@@ -135,6 +135,10 @@
                 <a href="#" class="link menu-save-as">
                   Save As
                 </a>
+                <a href="#" class="link menu-export">
+                  <i class="material-icons">import_export</i>
+                  Export
+                </a>
                 <a href="/settings/" class="link menu-settings">
                   <i class="icon material-icons">settings</i>
                   Settings
@@ -444,6 +448,46 @@
         </div>
       </div>
       <!-- end: new-options -->
+
+      <!-- export -->
+      <div class="popup popup-export">
+        <div class="page-content">
+
+          <div class="block-title">Export As</div>
+          <div class="list">
+            <ul>
+              <li>
+                <label class="item-radio item-content">
+                  <input type="radio" name="export_as" value="json_files" checked />
+                  <i class="icon icon-radio"></i>
+                  <div class="item-inner">
+                    <div class="item-title">JSON Files</div>
+                  </div>
+                </label>
+              </li>
+              <li class="item-content">
+                <div class="item-inner item-cell">
+
+                  <div class="item-row">
+                    <div class="item-cell" style="width: 180px">
+                    </div>
+
+                    <div class="item-cell" style="width: 180px">
+                      <button class="col button button-fill action-export"">
+                        <i class="icon material-icons">import_export</i>
+                        Export
+                      </button>
+                    </div>
+                  </div>
+
+                </div>
+              </li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+      <!-- end: export -->
 
       <!-- duplicates -->
       <div class="popup popup-duplicates">
