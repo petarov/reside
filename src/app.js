@@ -661,10 +661,10 @@ class ResideApp {
 
   exportBundles(bundleName) {
     if (this._bundles) {
-      Utils.exportBundlesToJson(this._bundles, bundleName).then(() => {
+      Utils.exportBundlesToJson(this._bundles, bundleName).then(filePath => {
         // notify user
         this._app.toast.create({
-          text: `Exported to ${bundleName}.`,
+          text: `Exported to ${filePath}.`,
           closeTimeout: Defs.TOAST_NORMAL,
         }).open();
       }).catch(e => {

@@ -36,7 +36,13 @@ class Utils {
     return new Promise((resolve, reject) => {
       const { dirname, name } = Utils.getBundleName(
         bundles.values().next().value.filepath);
-      const exportPath = path.join(dirname, `${bundleName}.json`);
+
+      let exportPath;
+      if (bundleName.endsWith('.json')) {
+        exportPath = path.join(dirname, `${bundleName}`);
+      } else {
+        exportPath = path.join(dirname, `${bundleName}.json`);
+      }
 
       const wrapper = {};
       for (const bundle of bundles.values()) {
@@ -48,7 +54,7 @@ class Utils {
         stream.write(JSON.stringify(wrapper, null, 2));
         stream.end();
       });
-      stream.once('finish', () => resolve());
+      stream.once('finish', () => resolve(exportPath));
       stream.once('error', (err) => reject(err));
     });
   }
