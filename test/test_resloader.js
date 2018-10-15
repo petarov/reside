@@ -1,7 +1,9 @@
 // resloader tests
 
 const { ResLoader } = require('../src/resloader');
+const { Utils } = require('../src/utils');
 
+const path = require('path');
 const assert = require('assert');
 const chai = require('chai'),
   expect = require('chai').expect,
@@ -139,5 +141,23 @@ describe('resloader', () => {
     });
   });
 
+  describe('#export()', () => {
+    it('should export TestBundle files to json', () => {
+      return new ResLoader()
+        .path(`${__dirname}/data`)
+        .name('TestBundle')
+        .load().then((result) => {
+          const { index, bundles } = result;
+          return Utils.exportBundlesToJson(bundles, '_test_export').then(filePath => {
+            expect(path.basename(filePath)).to.be.equal('_test_export.json');
+            const json = require(filePath);
+            expect('en' in json).to.be.ok;
+            expect('de' in json).to.be.ok;
+            expect(json.de.INTERNAL_ERROR).to.equal('Interner Fehler');
+            expect(json.en.OUT_OF_SYNC).to.equal('Out of sync');
+          });
+        });
+    });
+  });
 
 });

@@ -3,3 +3,4 @@ out/
 test-data/
 
 test.js
+_test*.json
