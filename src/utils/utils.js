@@ -32,6 +32,27 @@ class Utils {
     return path.join(dirpath, `${name}_${locale}.properties`);
   }
 
+  static exportBundlesToJson(bundles, bundleName) {
+    return new Promise((resolve, reject) => {
+      const { dirname, name } = Utils.getBundleName(
+        bundles.values().next().value.filepath);
+      const exportPath = path.join(dirname, `${bundleName}.json`);
+
+      const wrapper = {};
+      for (const bundle of bundles.values()) {
+        bundle.exportTo(wrapper);
+      }
+
+      const stream = fs.createWriteStream(exportPath);
+      stream.once('open', function (fd) {
+        stream.write(JSON.stringify(wrapper, null, 2));
+        stream.end();
+      });
+      stream.once('finish', () => resolve());
+      stream.once('error', (err) => reject(err));
+    });
+  }
+
   static isComment(label) {
     return !label || label.startsWith('#') || label.startsWith(';') || label.startsWith('/');
   }

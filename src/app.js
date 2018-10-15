@@ -251,9 +251,16 @@ class ResideApp {
           el: '.popup-export',
           on: {
             open: () => {
-              $$(ID.export).on('click', (e) => {
+              $$(ID.export).once('click', (e) => {
                 popup.close();
-                // TODO
+                this._app.dialog.prompt('Enter an export name', 'Export As', (value) => {
+                  if (value) {
+                    this.exportBundles(value);
+                  } else {
+                    // notify user
+                    this._app.dialog.alert('Export name not specified!');
+                  }
+                });
               });
             }
           }
@@ -649,6 +656,23 @@ class ResideApp {
     } else {
       // notify user
       this._app.dialog.alert('Nothing to save!');
+    }
+  }
+
+  exportBundles(bundleName) {
+    if (this._bundles) {
+      Utils.exportBundlesToJson(this._bundles, bundleName).then(() => {
+        // notify user
+        this._app.toast.create({
+          text: `Exported to ${bundleName}.`,
+          closeTimeout: Defs.TOAST_NORMAL,
+        }).open();
+      }).catch(e => {
+        console.error('Export failed!', e);
+      });
+    } else {
+      // notify user
+      this._app.dialog.alert('Nothing to export!');
     }
   }
 

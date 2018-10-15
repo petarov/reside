@@ -23,6 +23,7 @@ Here's an outline of what ResIDE can do:
   - Filtering. Show only labels for which a translation is missing.
   - Support for saving the bundles as either `utf8` or `latin1` encoded. Choosing the latter will automatically escape all `ucs2` characters, .e.g, `\u00e4`.
   - Select whether to use `LF`, `CRLF` or html `<br>` for new lines in translations.
+  - Export everything to a JSON file.
 
 # Development
 

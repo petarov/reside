@@ -27,6 +27,15 @@ class ResBundle {
     this._strings = {};
   }
 
+  exportTo(wrapper) {
+    console.info(`Exporting contents of bundle ${this._filepath} ...`);
+    const table = {};
+    for (const k in this._strings) {
+      table[k] = this._strings[k];
+    }
+    wrapper[this._locale] = table;
+  }
+
   save(opts = { newlineMode: NewlineMode.LF, encoding: 'utf8' }) {
     console.info(`Saving bundle to ${this._filepath} ...`);
 
