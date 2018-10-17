@@ -3,7 +3,7 @@ ResIDE [![Build Status](https://travis-ci.org/petarov/reside.svg?branch=master)]
 
 ![Residé Himself](src/assets/icons/png/cat-vampire-icon-96x96.png)
 
-A [Java-ResourceBundle](https://docs.oracle.com/javase/7/docs/api/java/util/ResourceBundle.html) files GUI editor app for the desktop.
+A mighty desktop editor app for [Java-ResourceBundle](https://docs.oracle.com/javase/7/docs/api/java/util/ResourceBundle.html) files.
 
 ![ResIDE App Screenshot](https://i.imgur.com/sZsJLgf.png)
 
