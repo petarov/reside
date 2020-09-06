@@ -1,6 +1,10 @@
 ResIDE Changes
 ================
 
+### 0.0.12
+
+  * Add export to XLSX (Excel) menu option
+
 ### 0.0.11
   
   * Add support for loading bundles with duplicate labels [#1](../../pull/1)

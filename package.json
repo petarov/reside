@@ -1,6 +1,6 @@
 {
   "name": "ResIDE",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "description": "ResIDE is a minimalistic Java ResourceBundle files editor.",
   "main": "./src/main.js",
   "scripts": {
