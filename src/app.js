@@ -18,6 +18,7 @@ const ID = {
   searchForm: 'form.searchbar',
   search: 'input[type="search"]',
   export: 'button.action-export',
+  exportAs: 'input[type="radio"][name="export_as"]:checked',
   cfgEncoding: 'input[name="encoding"]',
   cfgNewlines: 'input[name="newlines"]',
   cfgSearchIn: 'input[name="search_in"]',
@@ -251,11 +252,13 @@ class ResideApp {
           el: '.popup-export',
           on: {
             open: () => {
+              let exportType;
               $$(ID.export).once('click', (e) => {
+                const exportType = $$(ID.exportAs).val();
                 popup.close();
                 this._app.dialog.prompt('Enter an export name', 'Export As', (value) => {
                   if (value) {
-                    this.exportBundles(value);
+                    this.exportBundles(exportType, value);
                   } else {
                     // notify user
                     this._app.dialog.alert('Export name not specified!');
@@ -659,17 +662,32 @@ class ResideApp {
     }
   }
 
-  exportBundles(bundleName) {
+  exportBundles(exportType, bundleName) {
     if (this._bundles) {
-      Utils.exportBundlesToJson(this._bundles, bundleName).then(filePath => {
+      if (exportType === 'json_files') {
+        Utils.exportBundlesToJson(this._bundles, bundleName).then(filePath => {
+          // notify user
+          this._app.toast.create({
+            text: `Exported to ${filePath}.`,
+            closeTimeout: Defs.TOAST_NORMAL,
+          }).open();
+        }).catch(e => {
+          console.error('JSON Export failed!', e);
+        });
+      } else if (exportType === 'xlsx_files') {
+        Utils.exportBundlesToXLSX(this._bundles, bundleName).then(filePath => {
+          // notify user
+          this._app.toast.create({
+            text: `Exported to ${filePath}.`,
+            closeTimeout: Defs.TOAST_NORMAL,
+          }).open();
+        }).catch(e => {
+          console.error('XLSX Export failed!', e);
+        });
+      } else {
         // notify user
-        this._app.toast.create({
-          text: `Exported to ${filePath}.`,
-          closeTimeout: Defs.TOAST_NORMAL,
-        }).open();
-      }).catch(e => {
-        console.error('Export failed!', e);
-      });
+        this._app.dialog.alert(`Unknow export type ${exportType}!`);
+      }
     } else {
       // notify user
       this._app.dialog.alert('Nothing to export!');

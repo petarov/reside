@@ -4,11 +4,13 @@ const { ResLoader } = require('../src/resloader');
 const { Utils } = require('../src/utils');
 
 const path = require('path');
+const fs = require('fs');
 const assert = require('assert');
 const chai = require('chai'),
   expect = require('chai').expect,
   chaiAsPromised = require('chai-as-promised');
 chai.use(chaiAsPromised);
+const x4n = require('excel4node');
 
 describe('resloader', () => {
 
@@ -142,7 +144,7 @@ describe('resloader', () => {
   });
 
   describe('#export()', () => {
-    it('should export TestBundle files to json', () => {
+    it('should export TestBundle files to JSON', () => {
       return new ResLoader()
         .path(`${__dirname}/data`)
         .name('TestBundle')
@@ -155,6 +157,21 @@ describe('resloader', () => {
             expect('de' in json).to.be.ok;
             expect(json.de.INTERNAL_ERROR).to.equal('Interner Fehler');
             expect(json.en.OUT_OF_SYNC).to.equal('Out of sync');
+          });
+        });
+    });
+
+    it('should export TestBundle files to XLSX', () => {
+      return new ResLoader()
+        .path(`${__dirname}/data`)
+        .name('TestBundle')
+        .load().then((result) => {
+          const { index, bundles } = result;
+          return Utils.exportBundlesToXLSX(bundles, '_test_export').then(filePath => {
+            expect(path.basename(filePath)).to.be.equal('_test_export.xlsx');
+            const stats = fs.statSync(filePath);
+            const fileSizeInBytes = stats["size"];
+            expect(fileSizeInBytes).to.greaterThan(0);
           });
         });
     });
