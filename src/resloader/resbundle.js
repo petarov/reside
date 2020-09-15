@@ -120,6 +120,7 @@ class ResBundle {
     }
   }
 
+
   reload(index, duplicates) {
     return new Promise((resolve, reject) => {
       console.info(`Loading ${this._filepath} ...`);
@@ -140,7 +141,7 @@ class ResBundle {
           return;
         }
 
-        const parts = line.split('=', 2);
+        const parts = Utils.split2(line, '=');
         const left = parts[0].trim();
         let right = parts[1].trim();
 

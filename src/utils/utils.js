@@ -9,6 +9,14 @@ const Defs = require('../defs');
 
 class Utils {
 
+  static split2(text, separator) {
+    const idx = text.indexOf(separator);
+    if (idx > -1) {
+      return [ text.slice(0, idx), text.slice(idx + 1, text.length) ];
+    }
+    return [ text, '' ];
+  }
+
   static isComment(label) {
     return !label || label.startsWith('#') || label.startsWith(';') || label.startsWith('/');
   }
