@@ -165,7 +165,8 @@ class ResBundle {
           }
 
           // convert all known new line markers
-          right = right.replace(/(\\n)|(<br>)|(\\r\\n)/g, '\n');
+          // right = right.replace(/(\\n)|(<br>)|(\\r\\n)/g, '\n');
+          right = right.replace(/(\\n)|(\\r\\n)/g, '\n');
 
           this._addItem(left, right, index, duplicates);
         } catch (err) {
