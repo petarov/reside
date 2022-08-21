@@ -5,7 +5,7 @@ const { ipcRenderer, shell } = require('electron');
 const { app, dialog } = require('electron').remote;
 const path = require('path');
 
-const Framework7 = require('framework7'),
+const Framework7 = require('../node_modules/framework7'),
   Template7 = require('template7');
 const $$ = Dom7;
 

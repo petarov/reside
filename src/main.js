@@ -53,7 +53,10 @@ function createAppWindow() {
   let opts = {
     width: Defs.APP_WINDOW_WIDTH,
     height: Defs.APP_WINDOW_HEIGHT,
-    icon: path.join(__dirname, 'assets/icons/png/cat-vampire-icon-64x64.png')
+    icon: path.join(__dirname, 'assets/icons/png/cat-vampire-icon-64x64.png'),
+    webPreferences: {
+      nodeIntegration: true
+    }
   };
 
   // try resetting last known window position and size
@@ -95,7 +98,17 @@ function createMenu() {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.once('ready', SPLASH_ENABLED ? createSplashWindow : createAppWindow);
+app.whenReady().then(() => {
+  SPLASH_ENABLED ? createSplashWindow() : createAppWindow();
+
+  app.once('activate', function () {
+    // On OS X it's common to re-create a window in the app when the
+    // dock icon is clicked and there are no other windows open.
+    if (BrowserWindow.getAllWindows().length === 0) {
+      createAppWindow();
+    }
+  });
+});
 
 // Quit when all windows are closed.
 app.once('window-all-closed', function () {
@@ -103,14 +116,6 @@ app.once('window-all-closed', function () {
   // to stay active until the user quits explicitly with Cmd + Q
   if (process.platform !== 'darwin') {
     app.quit();
-  }
-});
-
-app.once('activate', function () {
-  // On OS X it's common to re-create a window in the app when the
-  // dock icon is clicked and there are no other windows open.
-  if (mainWindow === null) {
-    createAppWindow();
   }
 });
 
