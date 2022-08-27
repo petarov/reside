@@ -1,5 +1,8 @@
-ResIDE [![Build Status](https://travis-ci.org/petarov/reside.svg?branch=master)](https://travis-ci.org/petarov/reside)
+ResIDE 
 ====================
+
+[![Test](https://github.com/petarov/reside/actions/workflows/test.yml/badge.svg)](https://github.com/petarov/reside/actions/workflows/test.yml)
+[![Build/Release](https://github.com/petarov/reside/actions/workflows/build.yml/badge.svg)](https://github.com/petarov/reside/actions/workflows/build.yml)
 
 ![Residé Himself](src/assets/icons/png/cat-vampire-icon-96x96.png)
 
