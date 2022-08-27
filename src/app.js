@@ -160,9 +160,9 @@ class ResideApp {
           title: 'Save new bundle file as',
           defaultPath: 'NewBundle_en.properties',
           filters: Defs.SUPPORTED_EXTENSIONS,
-        }, (filePath) => {
-          if (filePath) {
-            this.newBundles(filePath)
+        }).then(result => {
+          if (!result.canceled) {
+            this.newBundles(result.filePath);
           }
         });
       }.bind(this);
@@ -202,9 +202,9 @@ class ResideApp {
           title: 'Select a bundle file',
           properties: ['openFile'],
           filters: Defs.SUPPORTED_EXTENSIONS,
-        }, (filePaths) => {
-          if (filePaths) {
-            this.openBundles(filePaths[0]);
+        }).then(result => {
+          if (!result.canceled) {
+            this.openBundles(result.filePaths[0]);
           }
         });
       }.bind(this);
@@ -320,7 +320,7 @@ class ResideApp {
   }
 
   attachLabelListeners() {
-    $$('.virtual-list').on('click', 'a.label', (e) => {
+    $$('.virtual-list').on('click', 'li .item-content', (e) => {
       const target = $$(e.target);
       const text = target.text() || target.find('.item-title').text();
       this.editLabel(text);
