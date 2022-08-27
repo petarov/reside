@@ -562,7 +562,7 @@ class ResideApp {
     this.displayLabels(true);
     this.updateLocaleChips();
     // notify user
-    $$('#nav-title').text(name);
+    $$('.file-title').text(name);
     this._app.toast.create({
       text: `New ${bundle.filename} opened.`,
       closeTimeout: Defs.TOAST_NORMAL,
@@ -589,7 +589,7 @@ class ResideApp {
         this.displayLabels(true);
         this.updateLocaleChips();
         // notify user
-        $$('#nav-title').text(name);
+        $$('.file-title').text(name);
         this._app.toast.create({
           text: `Loaded ${bundles.size} file(s) for ${name}.`,
           closeTimeout: Defs.TOAST_NORMAL,
@@ -632,7 +632,7 @@ class ResideApp {
           const { newName } = bundle.rename(bundleName);
           bundle.save({ newlineMode, encoding });
           // notify user
-          $$('#nav-title').text(newName);
+          $$('.file-title').text(newName);
         } else {
           bundle.save({ newlineMode, encoding });
         }
