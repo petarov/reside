@@ -8,8 +8,8 @@
     "demo": "electron-forge start",
     "package": "electron-forge package --platform=darwin --platform=win32 --arch=x64",
     "dist": "electron-forge make --platform=darwin --arch=x64",
-    "test": "mocha test/ui-tests",
-    "testfn": "mocha test"
+    "test": "mocha test",
+    "testui": "mocha test/ui-tests"
   },
   "repository": "https://github.com/petarov/reside",
   "keywords": [

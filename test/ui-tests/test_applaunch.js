@@ -13,6 +13,7 @@ describe('Application launch', function () {
 
   beforeEach(() => {
     this.app = new Application({
+      chromeDriverArgs: ['remote-debugging-port=9222'],
       startTimeout: 10000,
       waitTimeout: 10000,
       quitTimeout: 5000,
@@ -24,17 +25,18 @@ describe('Application launch', function () {
   });
 
   beforeEach(() => {
-    chaiAsPromised.transferPromiseness = this.app.transferPromiseness
+    chaiAsPromised.transferPromiseness = this.app.transferPromiseness;
   });
 
   afterEach(() => {
     if (this.app && this.app.isRunning()) {
-      return this.app.stop()
+      return this.app.stop();
     }
   });
 
   it('should open a window', () => {
-    return this.app.client.waitUntilWindowLoaded()
+    return this.app.client
+      // .waitUntilWindowLoaded(10000)
       .getWindowCount().should.eventually.have.at.least(1)
       .browserWindow.isMinimized().should.eventually.be.false
       .browserWindow.isVisible().should.eventually.be.true
