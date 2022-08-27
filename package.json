@@ -8,7 +8,7 @@
     "demo": "electron-forge start",
     "package": "electron-forge package --platform=darwin --platform=win32 --arch=x64",
     "dist": "electron-forge make --platform=darwin --arch=x64",
-    "test": "mocha test test/ui-tests",
+    "test": "mocha test/ui-tests",
     "testfn": "mocha test"
   },
   "repository": "https://github.com/petarov/reside",
@@ -29,7 +29,7 @@
     "electron-forge": "^5.2.2",
     "electron-prebuilt-compile": "8.2.0",
     "mocha": "^10.0.0",
-    "spectron": "^19.0.0"
+    "spectron": "^10.0.1"
   },
   "dependencies": {
     "electron-compile": "^6.4.3",
