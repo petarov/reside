@@ -2,6 +2,14 @@
 /*@import '../node_modules/framework7-icons/css/framework7-icons.css';*/
 @import '../node_modules/material-icons/iconfont/material-icons.css';
 
+.navbar-bg {
+  background-color: #2196f3;
+}
+
+.tl {
+  border-top: 1px solid gray;
+}
+
 .label {
   font-size: 90%;
 }
