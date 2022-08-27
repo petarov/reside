@@ -16,32 +16,37 @@
     <!-- Statusbar overlay -->
     <div class="statusbar"></div>
 
-    <div class="panel panel-left">
-      <div class="view view-left">
+    <div class="panel panel-left panel-reveal panel-init" data-swipe="true" data-visible-breakpoint="960">
+      <div class="view panel-view view-left">
         <div class="page" data-name="nav">
 
           <div class="navbar">
+            <div class="navbar-bg"></div>
             <div class="navbar-inner sliding">
-              <div class="app-avatar">
-                <img src="assets/icons/png/cat-vampire-icon-48x48.png" class="float-left">
-                <div class="app-version">v</div>
-              </div>
-              <div id="nav-title" class="title">
-                ResIDE
+              <div class="left">
+                <div class="app-avatar">
+                  <img src="assets/icons/png/cat-vampire-icon-48x48.png" class="float-left">
+                  <div class="app-version">v</div>
+                </div>
+                <div id="nav-title" class="title">
+                  ResIDE
+                </div>
               </div>
               
               <div class="subnavbar">
-                <!-- Searchbar inside of Subnavbar -->
-                <form class="searchbar">
-                  <div class="searchbar-inner">
-                    <div class="searchbar-input-wrap">
-                      <input type="search" placeholder="Search">
-                      <i class="searchbar-icon"></i>
-                      <span class="input-clear-button"></span>
+                <div class="subnavbar-inner">
+                  <!-- Searchbar inside of Subnavbar -->
+                  <form class="searchbar">
+                    <div class="searchbar-inner">
+                      <div class="searchbar-input-wrap">
+                        <input type="search" placeholder="Search">
+                        <i class="searchbar-icon"></i>
+                        <span class="input-clear-button"></span>
+                      </div>
+                      <span class="searchbar-disable-button">Cancel</span>
                     </div>
-                    <span class="searchbar-disable-button">Cancel</span>
-                  </div>
-                </form>
+                  </form>
+                </div>
               </div>
 
             </div>
@@ -104,6 +109,7 @@
       
         <!-- Top Navbar -->
         <div class="navbar">
+          <div class="navbar-bg"></div>
           <div class="navbar-inner">
             <div class="left">
               <a href="#" class="link icon-only panel-open" data-panel="left">
@@ -115,10 +121,10 @@
         </div>
       
         <!-- Toolbar -->
-        <div class="toolbar">
+        <div class="toolbar toolbar-top">
           <div class="toolbar-inner">
-            <div class="col-33">
-              <div class="row">
+            <!-- <div class="row"> -->
+              <!-- <div class="col-75"> -->
                 <!-- Toolbar links -->
                 <a href="#" class="link menu-new">
                   <i class="icon material-icons">create_new_folder</i>
@@ -147,8 +153,8 @@
                   <i class="icon material-icons">exit_to_app</i>
                   Quit
                 </a>
-              </div>
-            </div>
+              <!-- </div> -->
+            <!-- </div> -->
           </div>
         </div>
       
@@ -231,6 +237,7 @@
 
         <!-- Top Navbar -->
         <div class="navbar">
+          <div class="navbar-bg"></div>
           <div class="navbar-inner">
             <div class="left">
               <a href="#" class="link icon-only panel-open" data-panel="left">
@@ -551,7 +558,9 @@
 
   </div><!-- end: app -->
 
-  <script src="./renderer.js"></script>
+  <script src="../node_modules/framework7/framework7-bundle.min.js"></script>
+  <script src="../node_modules/template7/dist/template7.min.js"></script>
+  <script defer src="./renderer.js"></script>
 </body>
 
 </html>

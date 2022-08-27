@@ -5,8 +5,6 @@ const { ipcRenderer, shell } = require('electron');
 const { app, dialog } = require('electron').remote;
 const path = require('path');
 
-const Framework7 = require('../node_modules/framework7'),
-  Template7 = require('template7');
 const $$ = Dom7;
 
 const { ResLoader, ResBundle, NewlineMode } = require('./resloader');
@@ -33,18 +31,9 @@ class ResideApp {
     this.storage = new Storage(app, Defs.CONFIG_NAME);
 
     const f7App = new Framework7({
-      root: '#app',
+      el: '#app',
       name: Defs.APP_NAME,
-      id: 'net.vexelon.reside.desktop',
-      panel: {
-        swipe: 'left',
-        leftBreakpoint: 960,
-      },
-    });
-
-    // left panel view
-    this.leftView = f7App.views.create('.view-left', {
-      el: '.view-left'
+      id: 'net.vexelon.reside.desktop'
     });
 
     // main view
