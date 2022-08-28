@@ -7,8 +7,7 @@ on: push
 
 jobs:
   release:
-    runs-on: ${{ matrix.os }}
-
+  
     strategy:
       matrix:
         os: [macos-latest, ubuntu-latest, windows-latest]
@@ -27,6 +26,7 @@ jobs:
               - 'darwin'
               - 'linux'
 
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Check out Git repository
         uses: actions/checkout@v3
