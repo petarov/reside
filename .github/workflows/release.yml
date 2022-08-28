@@ -31,7 +31,7 @@ jobs:
       - name: Check out Git repository
         uses: actions/checkout@v3
 
-      - name: Set up Node.js
+      - name: Set up node.js
         uses: actions/setup-node@v3
         with:
           node-version: 16
@@ -43,7 +43,7 @@ jobs:
       - name: Build distributables
         run: yarn dist-${{ matrix.platform }}
 
-      - name: get version
+      - name: Get version
         id: version
         uses: notiz-dev/github-action-json-property@release
         with: 
@@ -51,10 +51,16 @@ jobs:
             prop_path: 'version'
       - run: echo Found version ${{steps.version.outputs.prop}}
 
-      - uses: "marvinpinto/action-automatic-releases@latest"
+      # - uses: "marvinpinto/action-automatic-releases@latest"
+      #   with:
+      #     repo_token: "${{ secrets.GITHUB_TOKEN }}"
+      #     automatic_release_tag: "v${{steps.version.outputs.prop}}"
+      #     prerelease: false
+      #     title: ResIDE-${{ matrix.platform }}-v${{steps.version.outputs.prop}}"
+      #     files: out/make/zip/${{ matrix.platform }}/x64/*.zip
+
+      - name: Upload ${{ matrix.os }} build
+        uses: actions/upload-artifact@v3
         with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "v${{steps.version.outputs.prop}}"
-          prerelease: false
-          title: ResIDE-${{ matrix.platform }}-v${{steps.version.outputs.prop}}"
-          files: out/make/zip/${{ matrix.platform }}/x64/*.zip
+          name: ResIDE-${{ matrix.platform }}-v${{steps.version.outputs.prop}}"
+          path: out/make/zip/${{ matrix.platform }}/x64/*.zip
