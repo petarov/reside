@@ -1,4 +1,4 @@
-name: Build/release
+name: Build/Release
 
 on: push
   # push:
@@ -39,7 +39,6 @@ jobs:
 
       - name: Install dependencies
         run: yarn install
-
 
       - name: Build distributables
         run: yarn dist-${{ matrix.platform }}
