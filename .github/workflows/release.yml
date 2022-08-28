@@ -12,14 +12,20 @@ jobs:
     strategy:
       matrix:
         os: [macos-latest, ubuntu-latest, windows-latest]
-        platform: ['darwin', 'linux', 'win32']
+        platform: [darwin, linux, win32]
         exclude:
           - os: macos-latest
-            platform: ['linux', 'win32']
+            platform: 
+              - 'linux'
+              - 'win32'
           - os: ubuntu-latest
-            platform: ['darwin', 'win32']
+            platform: 
+              - 'darwin'
+              - 'win32'
           - os: windows-latest
-            platform: ['darwin', 'linux']
+            platform: 
+              - 'darwin'
+              - 'linux'
 
     steps:
       - name: Check out Git repository
