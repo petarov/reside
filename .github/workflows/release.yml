@@ -14,17 +14,17 @@ jobs:
         platform: [darwin, linux, win32]
         exclude:
           - os: macos-latest
-            platform: 
-              - linux
-              - win32
+            platform: linux
+          - os: macos-latest
+            platform: win32
           - os: ubuntu-latest
-            platform: 
-              - darwin
-              - win32
+            platform: darwin
+          - os: ubuntu-latest
+            platform: win32
           - os: windows-latest
-            platform: 
-              - darwin
-              - linux
+            platform: darwin
+          - os: windows-latest
+            platform: linux
 
     runs-on: ${{ matrix.os }}
     steps:
