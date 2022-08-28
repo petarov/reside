@@ -40,5 +40,26 @@ jobs:
       - name: Install dependencies
         run: yarn install
 
+
       - name: Build distributables
         run: yarn dist-${{ matrix.platform }}
+
+  publish:
+    needs: release
+
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: get version
+        id: version
+        uses: notiz-dev/github-action-json-property@release
+        with: 
+            path: 'package.json'
+            prop_path: 'version'
+      - run: echo Found version ${{steps.version.outputs.prop}}
+
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          prerelease: false
+          title: ResIDE-${{ matrix.platform }}-${{steps.version.outputs.prop}}"
+          files: out/make/zip/${{ matrix.platform }}/x64/*.zip
