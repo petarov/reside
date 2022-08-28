@@ -54,6 +54,7 @@ jobs:
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "v${{steps.version.outputs.prop}}"
           prerelease: false
           title: ResIDE-${{ matrix.platform }}-${{steps.version.outputs.prop}}"
           files: out/make/zip/${{ matrix.platform }}/x64/*.zip
