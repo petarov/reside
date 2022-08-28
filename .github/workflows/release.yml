@@ -12,6 +12,7 @@ jobs:
     strategy:
       matrix:
         os: [macos-latest, ubuntu-latest, windows-latest]
+        platform: ['darwin', 'linux', 'win32']
 
     steps:
       - name: Check out Git repository
@@ -27,4 +28,4 @@ jobs:
         run: yarn install
 
       - name: Build distributables
-        run: yarn dist
+        run: yarn dist-${{ matrix.platform }}

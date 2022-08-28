@@ -6,10 +6,13 @@
   "scripts": {
     "start": "electron-forge start -- withdebug nosplash",
     "demo": "electron-forge start",
+    "test": "mocha test",
+    "testui": "mocha test/ui-tests",    
     "package": "electron-forge package --platform=darwin --platform=win32 --arch=x64",
     "dist": "electron-forge make --platform=darwin --arch=x64",
-    "test": "mocha test",
-    "testui": "mocha test/ui-tests"
+    "dist-win32": "electron-forge make --platform=win32 --arch=x64",
+    "dist-linux": "electron-forge make --platform=linux --arch=x64",
+    "dist-darwin": "electron-forge make --platform=darwin --arch=x64"
   },
   "repository": "https://github.com/petarov/reside",
   "keywords": [
