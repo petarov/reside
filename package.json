@@ -7,12 +7,11 @@
     "start": "electron-forge start -- withdebug nosplash",
     "demo": "electron-forge start",
     "test": "mocha test",
-    "testui": "mocha test/ui-tests",    
+    "testui": "mocha test/ui-tests",
     "package": "electron-forge package --platform=darwin --platform=win32 --arch=x64",
-    "dist": "electron-forge make --platform=darwin --arch=x64",
-    "dist-win32": "electron-forge make --platform=win32 --arch=x64",
-    "dist-linux": "electron-forge make --platform=linux --arch=x64",
-    "dist-darwin": "electron-forge make --platform=darwin --arch=x64"
+    "dist-win32": "electron-forge make --platform win32 --arch x64",
+    "dist-linux": "electron-forge make --platform linux --arch x64",
+    "dist-darwin": "electron-forge make --platform darwin --arch x64"
   },
   "repository": "https://github.com/petarov/reside",
   "keywords": [
@@ -24,12 +23,13 @@
   "author": "Petar Petrov",
   "license": "MIT",
   "devDependencies": {
+    "@electron-forge/cli": "^6.0.0-beta.65",
+    "@electron-forge/maker-zip": "^6.0.0-beta.65",
     "babel-plugin-transform-async-to-generator": "^6.24.1",
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
-    "electron-forge": "^5.2.2",
     "electron-prebuilt-compile": "8.2.0",
     "mocha": "^10.0.0",
     "spectron": "^10.0.1"
@@ -48,34 +48,13 @@
   "type": "commonjs",
   "config": {
     "forge": {
-      "make_targets": {
-        "win32": [
-          "zip"
-        ],
-        "darwin": [
-          "dmg"
-        ],
-        "linux": [
-          "deb",
-          "rpm"
-        ]
-      },
-      "electronPackagerConfig": {
-        "packageManager": "yarn",
+      "makers": [
+        {
+          "name": "@electron-forge/maker-zip"
+        }
+      ],
+      "packagerConfig": {
         "icon": "src/assets/icons/cat-vampire-icon"
-      },
-      "electronWinstallerConfig": {
-        "name": "reside"
-      },
-      "electronInstallerDebian": {},
-      "electronInstallerRedhat": {},
-      "github_repository": {
-        "owner": "petarov",
-        "name": "reside"
-      },
-      "windowsStoreConfig": {
-        "packageName": "",
-        "name": "reside"
       }
     }
   }
