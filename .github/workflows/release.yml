@@ -43,29 +43,6 @@ jobs:
       - name: Build distributables
         run: yarn dist-${{ matrix.platform }}
 
-  publish:
-    needs: release
-
-    strategy:
-      matrix:
-        os: [macos-latest, ubuntu-latest, windows-latest]
-        platform: [darwin, linux, win32]
-        exclude:
-          - os: macos-latest
-            platform: linux
-          - os: macos-latest
-            platform: win32
-          - os: ubuntu-latest
-            platform: darwin
-          - os: ubuntu-latest
-            platform: win32
-          - os: windows-latest
-            platform: darwin
-          - os: windows-latest
-            platform: linux
-
-    runs-on: ${{ matrix.os }}
-    steps:
       - name: get version
         id: version
         uses: notiz-dev/github-action-json-property@release
