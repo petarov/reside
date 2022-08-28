@@ -56,11 +56,11 @@ jobs:
       #     repo_token: "${{ secrets.GITHUB_TOKEN }}"
       #     automatic_release_tag: "v${{steps.version.outputs.prop}}"
       #     prerelease: false
-      #     title: ResIDE-${{ matrix.platform }}-v${{steps.version.outputs.prop}}"
+      #     title: ResIDE-${{ matrix.platform }}-v${{steps.version.outputs.prop}}
       #     files: out/make/zip/${{ matrix.platform }}/x64/*.zip
 
       - name: Upload ${{ matrix.os }} build
         uses: actions/upload-artifact@v3
         with:
-          name: ResIDE-${{ matrix.platform }}-v${{steps.version.outputs.prop}}"
+          name: ResIDE-${{ matrix.platform }}-v${{steps.version.outputs.prop}}
           path: out/make/zip/${{ matrix.platform }}/x64/*.zip
