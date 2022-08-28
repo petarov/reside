@@ -13,6 +13,13 @@ jobs:
       matrix:
         os: [macos-latest, ubuntu-latest, windows-latest]
         platform: ['darwin', 'linux', 'win32']
+        exclude:
+          - os: macos-latest
+            platform: ['linux', 'win32']
+          - os: ubuntu-latest
+            platform: ['darwin', 'win32']
+          - os: windows-latest
+            platform: ['darwin', 'linux']
 
     steps:
       - name: Check out Git repository
