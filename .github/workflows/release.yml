@@ -7,7 +7,7 @@ on: push
 
 jobs:
   release:
-  
+
     strategy:
       matrix:
         os: [macos-latest, ubuntu-latest, windows-latest]
@@ -15,16 +15,16 @@ jobs:
         exclude:
           - os: macos-latest
             platform: 
-              - 'linux'
-              - 'win32'
+              - linux
+              - win32
           - os: ubuntu-latest
             platform: 
-              - 'darwin'
-              - 'win32'
+              - darwin
+              - win32
           - os: windows-latest
             platform: 
-              - 'darwin'
-              - 'linux'
+              - darwin
+              - linux
 
     runs-on: ${{ matrix.os }}
     steps:
